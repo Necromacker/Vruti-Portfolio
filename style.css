@@ -668,3 +668,404 @@ body.light-theme .scroller-inner img {
         justify-content: center;
     }
 }
+
+/* Projects Section */
+.projects-section {
+    padding: 4rem 2rem;
+    min-height: 100vh;
+    background: var(--bg-color);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+}
+
+.projects-header h2 {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 500;
+    margin-bottom: 3rem;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.card-swap-wrapper {
+    position: relative;
+    width: 100%;
+    height: 600px; /* Adjust as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+}
+
+.card-swap-container {
+    position: relative;
+    width: 300px; /* Default width */
+    height: 400px; /* Default height */
+    transform-style: preserve-3d;
+}
+
+.card {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300px;
+    height: 400px;
+    background: var(--bg-color);
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    border-radius: 20px;
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    
+    /* Animation props */
+    transform-style: preserve-3d;
+    will-change: transform;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+.card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.card p {
+    font-size: 1rem;
+    color: #666;
+}
+
+/* Skills Section */
+.skills-section {
+    padding: 4rem 2rem;
+    background: var(--secondary-bg);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.skills-header h2 {
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-weight: 500;
+    margin-bottom: 3rem;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 2rem;
+    width: 100%;
+    max-width: 1000px;
+}
+
+.skill-card {
+    background: var(--bg-color);
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(128, 128, 128, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.skill-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.skill-card i {
+    font-size: 3rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
+.skill-card h3 {
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .card-swap-container {
+        transform: scale(0.8);
+    }
+}
+
+/* --- Projects Section Redesign --- */
+
+.projects-section {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    padding: 0;
+    display: flex;
+    align-items: center; /* Vertically center content */
+    background: #050505; /* Deep dark for contrast */
+    color: #fff;
+}
+
+.projects-text-content {
+    margin-left: 15vw;
+    z-index: 10;
+    pointer-events: none; /* Let clicks pass through if needed */
+}
+
+.projects-text-content h2 {
+    font-size: clamp(2.5rem, 4vw, 4rem);
+    line-height: 1.1;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(to right, #fff, #888);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.projects-text-content p {
+    font-size: 1.2rem;
+    color: #888;
+    text-align: left;
+}
+
+.card-swap-wrapper {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none; /* Allow interaction with cards only */
+}
+
+.card-swap-container {
+    position: absolute;
+    /* 
+       Anchor Point Calculation:
+       Card Size: 60vw width, 60vh height.
+       Target: 10% overflow right (-6vw edge), 10% overflow bottom (-6vh edge).
+       Center of Card relative to screen right/bottom:
+       Right Edge = 100vw. Card Right = 106vw. Card Center X = 106 - 30 = 76vw from LEFT.
+       So Right = 100 - 76 = 24vw.
+       Bottom Edge = 100vh. Card Bottom = 106vh. Card Center Y = 106 - 30 = 76vh from TOP.
+       So Bottom = 100 - 76 = 24vh.
+    */
+    right: 24vw; 
+    bottom: 24vh;
+    width: 0px; 
+    height: 0px;
+    z-index: 5;
+    pointer-events: auto;
+}
+
+.card {
+    position: absolute;
+    width: 60vw;
+    height: 60vh;
+    border-radius: 16px;
+    background: rgba(10, 10, 10, 0.95);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    
+    /* Ensure hardware acceleration */
+    will-change: transform;
+    transform-style: preserve-3d;
+}
+
+.card-header {
+    height: 48px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.card-header i {
+    font-size: 14px;
+    color: #fff;
+    opacity: 0.7;
+}
+
+.card-header span {
+    font-size: 14px;
+    font-weight: 500;
+    color: #eee;
+    letter-spacing: 0.5px;
+}
+
+.card-body {
+    flex: 1;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: radial-gradient(circle at 50% 50%, rgba(100, 100, 255, 0.1), transparent 70%);
+}
+
+.card-number {
+    font-size: 15vw;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.05); /* Very subtle number */
+    background: linear-gradient(135deg, #a78bfa, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.3));
+    font-family: var(--font-family);
+}
+
+/* Enhancing dark mode for skills */
+.skills-section {
+    background-color: var(--bg-color); 
+    border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* --- Fix Visibility & Positioning --- */
+
+.card-swap-wrapper {
+    /* Ensure it is on top of other section elements if needed */
+    z-index: 20; 
+}
+
+.card-swap-container {
+    /* Reset any conflicting transforms */
+    transform: none !important; 
+    transform-origin: center center !important;
+    
+    /* Ensure visible */
+    width: 1px !important;
+    height: 1px !important;
+    border: none;
+    background: transparent;
+    
+    /* Force high index */
+    z-index: 20;
+}
+
+.card {
+    /* Boost contrast against dark bg */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
+    background: #0f0f0f; /* Slightly lighter than section */
+    
+    /* Ensure opacity */
+    opacity: 1;
+}
+
+/* Ensure text doesn't overlap weirdly */
+.projects-text-content {
+    z-index: 30;
+}
+
+/* --- Center Project Text Content in Flex --- */
+
+.projects-section {
+    justify-content: flex-start; /* Ensure left alignment flow */
+}
+
+/* Ensure centering on desktop */
+@media (min-width: 769px) {
+    .projects-text-content {
+        margin-left: 10vw; /* Keep some offset from edge */
+        flex: 1; /* Allow it to take space */
+        max-width: 40%; /* Don't overlap card area */
+        display: flex;
+        flex-direction: column;
+        justify-content: center; /* Center Vertically in its container */
+    }
+}
+
+/* --- FINAL LAYOUT REFINE: 2-Column Standard --- */
+
+.projects-section {
+    display: flex !important;
+    flex-direction: row !important; /* Left and Right Columns */
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    padding: 0 !important;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Column 1: Text (Left) */
+.projects-text-content {
+    flex: 0 0 50% !important; /* Half width */
+    height: 100%;
+    margin: 0 !important;
+    padding-left: 10vw; /* Breathing room */
+    display: flex !important;
+    flex-direction: column;
+    justify-content: center;
+    position: relative !important;
+    pointer-events: none; /* Let clicks pass */
+    z-index: 10;
+}
+
+/* Column 2: Cards Wrapper (Right) */
+.card-swap-wrapper {
+    flex: 1 !important; /* Remaining width */
+    height: 100%;
+    position: relative !important;
+    width: auto !important;
+    margin: 0 !important;
+    top: auto !important;
+    left: auto !important;
+    pointer-events: auto; /* Allow interaction */
+}
+
+/* Anchor Point for Cards inside Right Column */
+.card-swap-container {
+    position: absolute !important;
+    right: 5vw !important; /* Adjust to push cards towards edge */
+    bottom: 15vh !important; /* Adjust vertical anchor */
+    width: 1px !important;
+    height: 1px !important;
+    transform: none !important;
+    z-index: 20;
+}
+
+/* Responsive: Stack on mobile */
+@media (max-width: 768px) {
+    .projects-section {
+        flex-direction: column !important;
+    }
+    .projects-text-content {
+        flex: 0 0 auto !important;
+        width: 100% !important;
+        height: 40%;
+        padding: 2rem;
+        align-items: center;
+        text-align: center;
+    }
+    .projects-text-content h2 {
+        text-align: center;
+    }
+    .projects-text-content p {
+        text-align: center;
+    }
+    .card-swap-wrapper {
+        width: 100% !important;
+        height: 60%;
+    }
+    .card-swap-container {
+        right: 50% !important; /* Center on mobile */
+        bottom: 40% !important;
+    }
+}
