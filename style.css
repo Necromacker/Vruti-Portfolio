@@ -6,7 +6,8 @@
     --nav-bg: rgba(255, 255, 255, 0.8);
     --font-family: 'Outfit', sans-serif;
     --transition-speed: 0.3s;
-    --about-bg-color: #fcf9f2; /* Premium Cream */
+    --about-bg-color: #fcf9f2;
+    /* Premium Cream */
 }
 
 body.dark-theme {
@@ -14,11 +15,13 @@ body.dark-theme {
     --text-color: #f5f5f5;
     --secondary-bg: #1a1a1a;
     --nav-bg: rgba(10, 10, 10, 0.8);
-    --about-bg-color: #1a1a1a; 
+    --about-bg-color: #1a1a1a;
 }
+
 img#img1 {
     height: 88.6%;
 }
+
 * {
     margin: 0;
     padding: 0;
@@ -56,7 +59,8 @@ body {
     transition: all var(--transition-speed);
 }
 
-.nav-left .logo, .nav-center a {
+.nav-left .logo,
+.nav-center a {
     color: var(--text-color);
 }
 
@@ -190,7 +194,7 @@ body {
     transform: scale(0);
 }
 
-.st-sunMoonThemeToggleBtn svg mask > circle {
+.st-sunMoonThemeToggleBtn svg mask>circle {
     transition: transform 0.64s cubic-bezier(0.41, 0.64, 0.32, 1.575);
     transform: translate(0px, 0px);
 }
@@ -198,38 +202,46 @@ body {
 .st-sunMoonThemeToggleBtn svg .sunRay2 {
     animation-delay: 0.05s !important;
 }
+
 .st-sunMoonThemeToggleBtn svg .sunRay3 {
     animation-delay: 0.1s !important;
 }
+
 .st-sunMoonThemeToggleBtn svg .sunRay4 {
     animation-delay: 0.17s !important;
 }
+
 .st-sunMoonThemeToggleBtn svg .sunRay5 {
     animation-delay: 0.25s !important;
 }
+
 .st-sunMoonThemeToggleBtn svg .sunRay6 {
     animation-delay: 0.29s !important;
 }
 
-.st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg {
+.st-sunMoonThemeToggleBtn .themeToggleInput:checked+svg {
     transform: rotate(90deg);
 }
-.st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg mask > circle {
+
+.st-sunMoonThemeToggleBtn .themeToggleInput:checked+svg mask>circle {
     transform: translate(16px, -3px);
 }
-.st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg .sunMoon {
+
+.st-sunMoonThemeToggleBtn .themeToggleInput:checked+svg .sunMoon {
     transform: scale(0.55);
 }
-.st-sunMoonThemeToggleBtn .themeToggleInput:checked + svg .sunRay {
+
+.st-sunMoonThemeToggleBtn .themeToggleInput:checked+svg .sunRay {
     animation: showRay1832 0.4s ease 0s 1 forwards;
 }
 
 @keyframes showRay1832 {
     0% {
-      transform: scale(0);
+        transform: scale(0);
     }
+
     100% {
-      transform: scale(1);
+        transform: scale(1);
     }
 }
 
@@ -289,7 +301,8 @@ body {
     width: 100vw;
     height: 100vh;
     display: flex;
-    align-items: flex-end; /* Align to bottom for face effect */
+    align-items: flex-end;
+    /* Align to bottom for face effect */
     justify-content: center;
     overflow: hidden;
 }
@@ -326,12 +339,12 @@ body {
 
 /* Custom Cursor */
 .cursor {
-    
+
     position: fixed;
     width: 20px;
     height: 20px;
-    background-color: rgba(0,0,0,0.1);
-    border: 1px solid rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.5);
     border-radius: 50%;
     pointer-events: none;
     z-index: 100;
@@ -339,26 +352,30 @@ body {
     transform: translate(-50%, -50%);
 }
 
-.main-container:hover ~ .cursor {
+.main-container:hover~.cursor {
     opacity: 1;
 }
 
 /* Enhancing typography */
 h1 {
-    font-size: clamp(2.5rem, 7vw, 5rem); /* Reduced from 3.5rem / 10vw */
+    font-size: clamp(2.5rem, 7vw, 5rem);
+    /* Reduced from 3.5rem / 10vw */
     font-weight: 500;
     margin-bottom: 0.5rem;
     letter-spacing: -2px;
     color: #1a1a1a;
     text-transform: lowercase;
-      font-family: "Pixelify Sans", sans-serif;
+    font-family: "Pixelify Sans", sans-serif;
 }
-.student_text{
+
+.student_text {
     font-family: "Yuji Boku", sans-serif;
     font-weight: 900;
 }
+
 p {
-    font-size: clamp(0.85rem, 1.25vw, 1rem); /* Reduced from 0.9rem / 1.5vw */
+    font-size: clamp(0.85rem, 1.25vw, 1rem);
+    /* Reduced from 0.9rem / 1.5vw */
     line-height: 1.5;
     color: #888;
     max-width: 280px;
@@ -386,7 +403,7 @@ p {
     right: 0;
     width: 1px;
     height: 80%;
-    background: linear-gradient(to bottom, transparent, rgba(0,0,0,0.1), transparent);
+    background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1), transparent);
 }
 
 /* Infinite Loop Scroller */
@@ -414,7 +431,8 @@ body.dark-theme .scroller-wrapper {
 .scroller-inner {
     display: flex;
     gap: 4rem;
-    padding-right: 4rem; /* Match gap for seamless loop */
+    padding-right: 4rem;
+    /* Match gap for seamless loop */
 }
 
 .animate-loop-scroll {
@@ -425,6 +443,7 @@ body.dark-theme .scroller-wrapper {
     from {
         transform: translateX(0);
     }
+
     to {
         transform: translateX(-100%);
     }
@@ -439,7 +458,7 @@ body.dark-theme .scroller-wrapper {
 
 /* Make images visible on dark backgrounds in light theme */
 body.light-theme .scroller-inner img {
-    filter:  invert(1);
+    filter: invert(1);
 }
 
 
@@ -463,7 +482,7 @@ body.light-theme .scroller-inner img {
     margin-bottom: 5rem;
     font-family: inherit;
     letter-spacing: -1px;
-      text-transform: uppercase;
+    text-transform: uppercase;
 }
 
 .about-grid-new {
@@ -491,12 +510,13 @@ body.light-theme .scroller-inner img {
     text-align: left;
 }
 
-.info-block h6, .stat-block h6 {
+.info-block h6,
+.stat-block h6 {
     font-size: 2rem;
     font-weight: 700;
     letter-spacing: 1px;
     opacity: 1;
-  
+
 }
 
 .about-image-frame {
@@ -522,7 +542,7 @@ body.light-theme .scroller-inner img {
     height: 100%;
     object-fit: cover;
     border-radius: 999px 999px 0 0;
-   
+
 }
 
 .brand-footer {
@@ -579,73 +599,74 @@ body.light-theme .scroller-inner img {
 
 /* Download Button Stylings */
 .download-btn {
-  --main-focus: var(--accent-color);
-  --font-color: var(--text-color);
-  --bg-color-sub: rgba(128, 128, 128, 0.1);
-  --bg-color: var(--nav-bg);
-  --main-color: var(--text-color);
-  position: relative;
-  width: 80%;
-  max-width: 100%;
-  height: 48px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  border: 2px solid var(--main-color);
-  box-shadow: 4px 4px var(--main-color);
-  background-color: var(--bg-color);
-  border-radius: 10px;
-  overflow: hidden;
+    --main-focus: var(--accent-color);
+    --font-color: var(--text-color);
+    --bg-color-sub: rgba(128, 128, 128, 0.1);
+    --bg-color: var(--nav-bg);
+    --main-color: var(--text-color);
+    position: relative;
+    width: 80%;
+    max-width: 100%;
+    height: 48px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border: 2px solid var(--main-color);
+    box-shadow: 4px 4px var(--main-color);
+    background-color: var(--bg-color);
+    border-radius: 10px;
+    overflow: hidden;
 
-  transition: all 0.3s;
+    transition: all 0.3s;
 }
 
-.download-btn .button__icon, .download-btn .button__text {
-  transition: all 0.3s;
+.download-btn .button__icon,
+.download-btn .button__text {
+    transition: all 0.3s;
 }
 
 .download-btn .button__text {
-  width: 80%;
+    width: 80%;
 
-  color: var(--font-color);
-  font-weight: 700;
-  font-size: 0.95rem;
-  text-transform: none;
-  transition: all 0.3s;
+    color: var(--font-color);
+    font-weight: 700;
+    font-size: 0.95rem;
+    text-transform: none;
+    transition: all 0.3s;
 }
 
 .download-btn .button__icon {
-  position: absolute;
-  right: 0;
-  height: 100%;
-  width: 20%;
-  background-color: var(--main-color);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s;
+    position: absolute;
+    right: 0;
+    height: 100%;
+    width: 20%;
+    background-color: var(--main-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s;
 }
 
 .download-btn .svg {
-  width: 24px;
-  fill: var(--bg-color);
+    width: 24px;
+    fill: var(--bg-color);
 }
 
 .download-btn:hover {
-  background: var(--bg-color);
+    background: var(--bg-color);
 }
 
 .download-btn:hover .button__text {
-  opacity: 0;
+    opacity: 0;
 }
 
 .download-btn:hover .button__icon {
-  width: 100%;
+    width: 100%;
 }
 
 .download-btn:active {
-  transform: translate(3px, 3px);
-  box-shadow: 0px 0px var(--main-color);
+    transform: translate(3px, 3px);
+    box-shadow: 0px 0px var(--main-color);
 }
 
 @media (max-width: 1024px) {
@@ -653,17 +674,17 @@ body.light-theme .scroller-inner img {
         grid-template-columns: 1fr;
         gap: 6rem;
     }
-    
+
     .about-col {
         text-align: center;
         align-items: center;
     }
-    
+
     .about-stats-new {
         text-align: center;
         align-items: center;
     }
-    
+
     .about-footer-text {
         justify-content: center;
     }
@@ -692,7 +713,8 @@ body.light-theme .scroller-inner img {
 .card-swap-wrapper {
     position: relative;
     width: 100%;
-    height: 600px; /* Adjust as needed */
+    height: 600px;
+    /* Adjust as needed */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -701,15 +723,16 @@ body.light-theme .scroller-inner img {
 
 .card-swap-container {
     position: relative;
-    width: 300px; /* Default width */
-    height: 400px; /* Default height */
+    width: 300px;
+    /* Default width */
+    height: 400px;
+    /* Default height */
     transform-style: preserve-3d;
 }
 
 .card {
     position: absolute;
-    top: 50%;
-    left: 50%;
+
     width: 300px;
     height: 400px;
     background: var(--bg-color);
@@ -721,8 +744,8 @@ body.light-theme .scroller-inner img {
     justify-content: center;
     align-items: center;
     text-align: center;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+
     /* Animation props */
     transform-style: preserve-3d;
     will-change: transform;
@@ -771,7 +794,7 @@ body.light-theme .scroller-inner img {
     padding: 2rem;
     border-radius: 15px;
     text-align: center;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     border: 1px solid rgba(128, 128, 128, 0.1);
     display: flex;
@@ -782,7 +805,7 @@ body.light-theme .scroller-inner img {
 
 .skill-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 .skill-card i {
@@ -812,15 +835,18 @@ body.light-theme .scroller-inner img {
     overflow: hidden;
     padding: 0;
     display: flex;
-    align-items: center; /* Vertically center content */
-    background: #050505; /* Deep dark for contrast */
+    align-items: center;
+    /* Vertically center content */
+    background: #050505;
+    /* Deep dark for contrast */
     color: #fff;
 }
 
 .projects-text-content {
     margin-left: 15vw;
     z-index: 10;
-    pointer-events: none; /* Let clicks pass through if needed */
+    pointer-events: none;
+    /* Let clicks pass through if needed */
 }
 
 .projects-text-content h2 {
@@ -845,7 +871,8 @@ body.light-theme .scroller-inner img {
     height: 100%;
     top: 0;
     left: 0;
-    pointer-events: none; /* Allow interaction with cards only */
+    pointer-events: none;
+    /* Allow interaction with cards only */
 }
 
 .card-swap-container {
@@ -860,9 +887,9 @@ body.light-theme .scroller-inner img {
        Bottom Edge = 100vh. Card Bottom = 106vh. Card Center Y = 106 - 30 = 76vh from TOP.
        So Bottom = 100 - 76 = 24vh.
     */
-    right: 24vw; 
+    right: 24vw;
     bottom: 24vh;
-    width: 0px; 
+    width: 0px;
     height: 0px;
     z-index: 5;
     pointer-events: auto;
@@ -880,7 +907,7 @@ body.light-theme .scroller-inner img {
     display: flex;
     flex-direction: column;
     padding: 0;
-    
+
     /* Ensure hardware acceleration */
     will-change: transform;
     transform-style: preserve-3d;
@@ -921,7 +948,8 @@ body.light-theme .scroller-inner img {
 .card-number {
     font-size: 15vw;
     font-weight: 700;
-    color: rgba(255, 255, 255, 0.05); /* Very subtle number */
+    color: rgba(255, 255, 255, 0.05);
+    /* Very subtle number */
     background: linear-gradient(135deg, #a78bfa, #3b82f6);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -931,28 +959,28 @@ body.light-theme .scroller-inner img {
 
 /* Enhancing dark mode for skills */
 .skills-section {
-    background-color: var(--bg-color); 
-    border-top: 1px solid rgba(255,255,255,0.05);
+    background-color: var(--bg-color);
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 /* --- Fix Visibility & Positioning --- */
 
 .card-swap-wrapper {
     /* Ensure it is on top of other section elements if needed */
-    z-index: 20; 
+    z-index: 20;
 }
 
 .card-swap-container {
     /* Reset any conflicting transforms */
-    transform: none !important; 
+    transform: none !important;
     transform-origin: center center !important;
-    
+
     /* Ensure visible */
     width: 1px !important;
     height: 1px !important;
     border: none;
     background: transparent;
-    
+
     /* Force high index */
     z-index: 20;
 }
@@ -961,8 +989,9 @@ body.light-theme .scroller-inner img {
     /* Boost contrast against dark bg */
     border: 1px solid rgba(255, 255, 255, 0.3);
     box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
-    background: #0f0f0f; /* Slightly lighter than section */
-    
+    background: #0f0f0f;
+    /* Slightly lighter than section */
+
     /* Ensure opacity */
     opacity: 1;
 }
@@ -975,18 +1004,23 @@ body.light-theme .scroller-inner img {
 /* --- Center Project Text Content in Flex --- */
 
 .projects-section {
-    justify-content: flex-start; /* Ensure left alignment flow */
+    justify-content: flex-start;
+    /* Ensure left alignment flow */
 }
 
 /* Ensure centering on desktop */
 @media (min-width: 769px) {
     .projects-text-content {
-        margin-left: 10vw; /* Keep some offset from edge */
-        flex: 1; /* Allow it to take space */
-        max-width: 40%; /* Don't overlap card area */
+        margin-left: 10vw;
+        /* Keep some offset from edge */
+        flex: 1;
+        /* Allow it to take space */
+        max-width: 40%;
+        /* Don't overlap card area */
         display: flex;
         flex-direction: column;
-        justify-content: center; /* Center Vertically in its container */
+        justify-content: center;
+        /* Center Vertically in its container */
     }
 }
 
@@ -994,7 +1028,8 @@ body.light-theme .scroller-inner img {
 
 .projects-section {
     display: flex !important;
-    flex-direction: row !important; /* Left and Right Columns */
+    flex-direction: row !important;
+    /* Left and Right Columns */
     justify-content: space-between !important;
     align-items: center !important;
     width: 100vw !important;
@@ -1006,35 +1041,42 @@ body.light-theme .scroller-inner img {
 
 /* Column 1: Text (Left) */
 .projects-text-content {
-    flex: 0 0 50% !important; /* Half width */
+    flex: 0 0 50% !important;
+    /* Half width */
     height: 100%;
     margin: 0 !important;
-    padding-left: 10vw; /* Breathing room */
+    padding-left: 10vw;
+    /* Breathing room */
     display: flex !important;
     flex-direction: column;
     justify-content: center;
     position: relative !important;
-    pointer-events: none; /* Let clicks pass */
+    pointer-events: none;
+    /* Let clicks pass */
     z-index: 10;
 }
 
 /* Column 2: Cards Wrapper (Right) */
 .card-swap-wrapper {
-    flex: 1 !important; /* Remaining width */
+    flex: 1 !important;
+    /* Remaining width */
     height: 100%;
     position: relative !important;
     width: auto !important;
     margin: 0 !important;
     top: auto !important;
     left: auto !important;
-    pointer-events: auto; /* Allow interaction */
+    pointer-events: auto;
+    /* Allow interaction */
 }
 
 /* Anchor Point for Cards inside Right Column */
 .card-swap-container {
     position: absolute !important;
-    right: 5vw !important; /* Adjust to push cards towards edge */
-    bottom: 15vh !important; /* Adjust vertical anchor */
+    right: 5vw !important;
+    /* Adjust to push cards towards edge */
+    bottom: 15vh !important;
+    /* Adjust vertical anchor */
     width: 1px !important;
     height: 1px !important;
     transform: none !important;
@@ -1046,6 +1088,7 @@ body.light-theme .scroller-inner img {
     .projects-section {
         flex-direction: column !important;
     }
+
     .projects-text-content {
         flex: 0 0 auto !important;
         width: 100% !important;
@@ -1054,18 +1097,23 @@ body.light-theme .scroller-inner img {
         align-items: center;
         text-align: center;
     }
+
     .projects-text-content h2 {
         text-align: center;
     }
+
     .projects-text-content p {
         text-align: center;
     }
+
     .card-swap-wrapper {
         width: 100% !important;
         height: 60%;
     }
+
     .card-swap-container {
-        right: 50% !important; /* Center on mobile */
+        right: 50% !important;
+        /* Center on mobile */
         bottom: 40% !important;
     }
 }

@@ -152,156 +152,17 @@ function initMouseInteractions() {
 
 // --- Card Swap Animation Logic (Ported from React) ---
 
+// --- Card Swap Animation Logic ---
+
 (function () {
-    const cardSwapContainer = document.querySelector('.card-swap-container');
-    if (!cardSwapContainer) return;
-
-    const cards = Array.from(document.querySelectorAll('.card'));
-    if (cards.length === 0) return;
-
-    // Config options
-    const width = 300; // Matches CSS
-    const height = 400; // Matches CSS
-    const cardDistance = 60; // distX
-    const verticalDistance = 70; // distY
-    const skewAmount = 6;
-    const delay = 5000;
-
-    // Animation Config (Elastic)
-    const config = {
-        ease: 'elastic.out(0.6,0.9)',
-        durDrop: 2,
-        durMove: 2,
-        durReturn: 2,
-        promoteOverlap: 0.9,
-        returnDelay: 0.05
-    };
-
-    // State
-    const total = cards.length;
-    let order = cards.map((_, i) => i); // [0, 1, 2, ...]
-    let tl = null;
-    let intervalId = null;
-
-    const makeSlot = (i, distX, distY, total) => ({
-        x: i * distX,
-        y: -i * distY,
-        z: -i * distX * 1.5,
-        zIndex: total - i
-    });
-
-    const placeNow = (el, slot, skew) => {
-        gsap.set(el, {
-            x: slot.x,
-            y: slot.y,
-            z: slot.z,
-            xPercent: -50,
-            yPercent: -50,
-            skewY: skew,
-            transformOrigin: 'center center',
-            zIndex: slot.zIndex,
-            force3D: true
-        });
-    };
-
-    // Initial Placement
-    cards.forEach((card, i) => {
-        placeNow(card, makeSlot(i, cardDistance, verticalDistance, total), skewAmount);
-    });
-
-    const swap = () => {
-        if (order.length < 2) return;
-
-        const frontIndex = order[0];
-        const restIndices = order.slice(1);
-
-        const elFront = cards[frontIndex];
-
-        // Create new timeline
-        tl = gsap.timeline();
-
-        // 1. Drop front card
-        tl.to(elFront, {
-            y: '+=500',
-            duration: config.durDrop,
-            ease: config.ease
-        });
-
-        tl.addLabel('promote', `-=${config.durDrop * config.promoteOverlap}`);
-
-        // 2. Move rest cards forward
-        restIndices.forEach((idx, i) => {
-            const el = cards[idx];
-            const slot = makeSlot(i, cardDistance, verticalDistance, total);
-
-            tl.set(el, { zIndex: slot.zIndex }, 'promote');
-            tl.to(el, {
-                x: slot.x,
-                y: slot.y,
-                z: slot.z,
-                duration: config.durMove,
-                ease: config.ease
-            }, `promote+=${i * 0.15}`);
-        });
-
-        // 3. Move front card to back
-        const backSlot = makeSlot(total - 1, cardDistance, verticalDistance, total);
-        tl.addLabel('return', `promote+=${config.durMove * config.returnDelay}`);
-
-        // Change zIndex immediately before moving back visually
-        tl.call(() => {
-            gsap.set(elFront, { zIndex: backSlot.zIndex });
-        }, null, 'return');
-
-        tl.to(elFront, {
-            x: backSlot.x,
-            y: backSlot.y,
-            z: backSlot.z,
-            duration: config.durReturn,
-            ease: config.ease
-        }, 'return');
-
-        // Update order state
-        tl.call(() => {
-            order = [...restIndices, frontIndex];
-        });
-    };
-
-    // Start Loop
-    // Delay first swap
-    setTimeout(() => {
-        swap();
-        intervalId = setInterval(swap, delay);
-    }, 1000); // 1s start delay
-
-    // Pause on Hover
     const wrapper = document.querySelector('.card-swap-wrapper');
-    if (wrapper) {
-        wrapper.addEventListener('mouseenter', () => {
-            if (tl) tl.pause();
-            clearInterval(intervalId);
-        });
-        wrapper.addEventListener('mouseleave', () => {
-            if (tl) tl.play();
-            intervalId = setInterval(swap, delay);
-        });
-    }
-
-})();
-
-// --- Updated Card Swap Logic for Dynamic Sizing ---
-
-(function () {
-    const section = document.querySelector('.projects-section');
     const container = document.querySelector('.card-swap-container');
-    if (!section || !container) return;
+    if (!wrapper || !container) return;
 
     const cards = Array.from(document.querySelectorAll('.card'));
     if (cards.length === 0) return;
 
     // Configuration
-    // We don't set width/height here anymore, CSS handles 60vw/60vh.
-
     const cardDistance = 40; // Horizontal offset per card (px)
     const verticalDistance = 40; // Vertical offset per card (px)
     const skewAmount = 2; // Subtle skew
@@ -309,9 +170,9 @@ function initMouseInteractions() {
 
     const config = {
         ease: 'elastic.out(0.6, 0.8)',
-        durDrop: 1.5, // Faster drop
-        durMove: 1.5, // Faster move
-        durReturn: 1.5, // Faster return
+        durDrop: 1.5,
+        durMove: 1.5,
+        durReturn: 1.5,
         promoteOverlap: 0.8,
         returnDelay: 0.05,
     };
@@ -322,12 +183,10 @@ function initMouseInteractions() {
     let isHovering = false;
     let timeoutId = null;
 
-    // Helper: calculate slot position relative to the container center anchor.
-    // i=0 is at (0,0,0). i=1 is at (distX, -distY, -Z).
     const makeSlot = (i) => ({
         x: i * cardDistance,
         y: -i * verticalDistance,
-        z: -i * cardDistance * 2, // More depth
+        z: -i * cardDistance * 2,
         zIndex: total - i
     });
 
@@ -337,61 +196,66 @@ function initMouseInteractions() {
             y: slot.y,
             z: slot.z,
             zIndex: slot.zIndex,
-            // Important: We center the card on the slot coordinate.
-            // Since CSS positions the anchor effectively at card center for the first card,
-            // xPercent: -50 ensures the card's center aligns with that point.
-            xPercent: -50,
-            yPercent: -50,
+            xPercent: -70,
+            yPercent: -70,
             skewY: skewAmount,
             transformOrigin: 'center center',
             force3D: true,
-            opacity: 1 // Ensure visible
+            opacity: 1
         });
     };
 
-    // Initial Set
+    // Initial Set - Ensures they start exactly where they should be
     cards.forEach((card, i) => {
         placeNow(card, makeSlot(i));
     });
 
     const scheduleNextSwap = () => {
-        // Continue loop regardless of hover
-        timeoutId = setTimeout(swap, delay);
+        clearTimeout(timeoutId);
+        if (!isHovering) {
+            timeoutId = setTimeout(swap, delay);
+        }
     };
 
     const swap = () => {
         if (order.length < 2) return;
+        if (isHovering && (!tl || !tl.isActive())) return;
 
         const frontIndex = order[0];
         const rest = order.slice(1);
         const elFront = cards[frontIndex];
 
-        // If a timeline is already active (unlikely with our logic, but safe), kill it
         if (tl && tl.isActive()) tl.kill();
 
         tl = gsap.timeline({
-            onComplete: scheduleNextSwap // Recursively schedule next
+            onComplete: scheduleNextSwap
         });
 
-        // 1. Drop Front Card
-        // Drop it significantly below the screen.
-        // Screen height is window.innerHeight. Since we are at bottom, a drop of 100vh is safe.
+        // 1. Drop Front Card Smoothly (1 second)
+        // User requested exactly 100px drop
+        const dropY = window.innerHeight;
+        const dropDuration = 1;
+
         tl.to(elFront, {
-            y: window.innerHeight * 1.5,
-            rotationX: 30,
+            y: dropY,
+
             opacity: 1,
-            duration: config.durDrop,
-            ease: config.ease
+            duration: dropDuration,
+            ease: "power1.inOut",
+            overwrite: "auto"
         });
 
-        tl.addLabel('promote', `-=${config.durDrop * config.promoteOverlap}`);
+        tl.addLabel('promote', `-=${dropDuration * 0.85}`);
 
         // 2. Move others forward
         rest.forEach((idx, i) => {
             const el = cards[idx];
             const slot = makeSlot(i);
 
-            tl.set(el, { zIndex: slot.zIndex }, 'promote');
+            // Delay z-index update to allow front card to clear and prevent premature layering jumps
+            // We set it halfway through the move
+            tl.set(el, { zIndex: slot.zIndex }, `promote+=${dropDuration * 0.5}`);
+
             tl.to(el, {
                 x: slot.x,
                 y: slot.y,
@@ -403,16 +267,21 @@ function initMouseInteractions() {
 
         // 3. Return Front to Back
         const backSlot = makeSlot(total - 1);
-        tl.addLabel('return', `promote+=${config.durMove * config.returnDelay}`);
 
-        tl.call(() => {
-            gsap.set(elFront, { zIndex: backSlot.zIndex, rotationX: 0, opacity: 1 });
-        }, null, 'return');
+        // Synch return exactly when drop finishes
+        tl.addLabel('returnStart', dropDuration);
 
+        // Switch Z-Index instantly when drop is done
+        tl.set(elFront, {
+            zIndex: backSlot.zIndex,
+            rotationX: 0
+        }, 'returnStart');
+
+        // Animate from dropY (bottom) to back slot position
         tl.fromTo(elFront,
             {
                 x: backSlot.x,
-                y: backSlot.y + window.innerHeight, // Come from below
+                y: dropY,
                 z: backSlot.z
             },
             {
@@ -420,18 +289,46 @@ function initMouseInteractions() {
                 y: backSlot.y,
                 z: backSlot.z,
                 duration: config.durReturn,
-                ease: config.ease
+                ease: config.ease,
+                immediateRender: false
             },
-            'return');
+            'returnStart');
 
+        // Update order state
         tl.call(() => {
             order = [...rest, frontIndex];
         });
     };
 
-    // Auto-play
-    // Start delay to let user see initial state
-    timeoutId = setTimeout(swap, 1000);
+    // Hover Interaction - Only pause when hovering a card specifically
+    let hoverCount = 0;
+
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            hoverCount++;
+            if (hoverCount === 1) { // First card entered
+                isHovering = true;
+                clearTimeout(timeoutId);
+                if (tl && tl.isActive()) tl.pause();
+            }
+        });
+
+        card.addEventListener('mouseleave', () => {
+            hoverCount--;
+            if (hoverCount <= 0) { // Last card left
+                hoverCount = 0;
+                isHovering = false;
+                if (tl && tl.paused()) {
+                    tl.resume();
+                } else {
+                    scheduleNextSwap();
+                }
+            }
+        });
+    });
+
+    // Start Loop
+    scheduleNextSwap();
 
 })();
 
