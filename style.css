@@ -855,6 +855,7 @@ body.light-theme .scroller-inner img {
     font-weight: 500;
     margin-bottom: 1.5rem;
     background: linear-gradient(to right, #fff, #888);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -951,6 +952,7 @@ body.light-theme .scroller-inner img {
     color: rgba(255, 255, 255, 0.05);
     /* Very subtle number */
     background: linear-gradient(135deg, #a78bfa, #3b82f6);
+    background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.3));
@@ -1024,96 +1026,190 @@ body.light-theme .scroller-inner img {
     }
 }
 
-/* --- FINAL LAYOUT REFINE: 2-Column Standard --- */
+/* --- FINAL LAYOUT REFINE: Vertical Stack with Wrapper --- */
 
 .projects-section {
     display: flex !important;
-    flex-direction: row !important;
-    /* Left and Right Columns */
-    justify-content: space-between !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
     align-items: center !important;
     width: 100vw !important;
-    height: 100vh !important;
+    min-height: 115vh !important;
+    /* Extra height to prevent overlap */
     padding: 0 !important;
     position: relative;
     overflow: hidden;
 }
 
-/* Column 1: Text (Left) */
+/* 1. Animation Area (Top) */
+/* Modified in later block, but ensuring specific styles here */
+.projects-animation-container {
+    position: relative !important;
+    /* Change from absolute to relative to take up flow space */
+    width: 100%;
+    height: 45vh;
+    /* Reserved space for huge text */
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    /* Align text to bottom of this area */
+    padding-bottom: 2rem;
+    z-index: 10;
+    pointer-events: none;
+}
+
+/* 2. Content Wrapper (Bottom) */
+.projects-content-wrapper {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    flex: 1;
+    /* Take remaining height */
+    position: relative;
+    padding-top: 5vh;
+}
+
+/* Text Content (Left) */
 .projects-text-content {
-    flex: 0 0 50% !important;
-    /* Half width */
+    flex: 0 0 45% !important;
     height: 100%;
     margin: 0 !important;
     padding-left: 10vw;
-    /* Breathing room */
     display: flex !important;
     flex-direction: column;
-    justify-content: center;
-    position: relative !important;
+    justify-content: flex-start;
+    /* Align to top of content area */
+    padding-top: 5vh;
+    position: absolute !important;
+    /* Keep absolute for cross-fade overlap */
+    top: 5vh;
+    /* Relative to wrapper */
+    left: 0;
     pointer-events: none;
-    /* Let clicks pass */
     z-index: 10;
+    opacity: 0;
 }
 
-/* Column 2: Cards Wrapper (Right) */
+/* Show only the first project detail initially */
+.project-detail-1 {
+    opacity: 1;
+}
+
+/* Cards Wrapper (Right) */
 .card-swap-wrapper {
     flex: 1 !important;
-    /* Remaining width */
     height: 100%;
     position: relative !important;
     width: auto !important;
     margin: 0 !important;
-    top: auto !important;
-    left: auto !important;
     pointer-events: auto;
-    /* Allow interaction */
 }
 
-/* Anchor Point for Cards inside Right Column */
+/* Anchor Point for Cards */
 .card-swap-container {
     position: absolute !important;
-    right: 5vw !important;
-    /* Adjust to push cards towards edge */
-    bottom: 15vh !important;
-    /* Adjust vertical anchor */
+    right: 10vw !important;
+    top: 10vh !important;
+    /* Push down from top of content wrapper */
     width: 1px !important;
     height: 1px !important;
     transform: none !important;
     z-index: 20;
 }
 
-/* Responsive: Stack on mobile */
-@media (max-width: 768px) {
-    .projects-section {
-        flex-direction: column !important;
+/* Responsive */
+@media (max-width: 1024px) {
+    .projects-content-wrapper {
+        flex-direction: column;
+        align-items: center;
     }
 
     .projects-text-content {
+        position: relative !important;
+        /* Stack normally on mobile */
+        width: 100% !important;
         flex: 0 0 auto !important;
-        width: 100% !important;
-        height: 40%;
-        padding: 2rem;
+        text-align: center;
         align-items: center;
-        text-align: center;
+        padding: 2rem;
+        height: auto;
+        opacity: 1 !important;
+        /* Force visible if JS fails or layout shifts */
     }
 
-    .projects-text-content h2 {
-        text-align: center;
-    }
-
-    .projects-text-content p {
-        text-align: center;
-    }
-
-    .card-swap-wrapper {
+    /* Hide others if strictly stacking, but for cross-fade keep absolute logic? 
+       For simplicity on mobile, we might keeping them stacked or ensure JS handles opacity 
+    */
+    .projects-text-content {
+        position: absolute !important;
         width: 100% !important;
-        height: 60%;
+        left: 0;
+        top: 0;
+    }
+
+    /* Make wrapper relative to hold absolute text items */
+    .projects-content-wrapper {
+        height: 60vh;
+        /* Fixed height for interaction */
     }
 
     .card-swap-container {
         right: 50% !important;
-        /* Center on mobile */
-        bottom: 40% !important;
+        top: 50% !important;
+    }
+}
+
+/* ===== ANIMATED PROJECTS TEXT WITH ROPES ===== */
+
+/* SVG container for ropes */
+.rope-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 100;
+}
+
+/* Rope styling */
+.rope {
+    stroke: #ffffff;
+    stroke-width: 3;
+    stroke-linecap: round;
+    fill: none;
+    opacity: 0.9;
+}
+
+/* Container for the animated PROJECTS text - Layout handled above */
+/* Additional tweaks if needed */
+.projects-text-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.animated-projects-text {
+    font-size: clamp(60px, 12vw, 150px);
+    font-weight: 900;
+    color: #ffffff;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    position: relative;
+    font-family: "Fascinate Inline", sans-serif;
+    /* Initial state - positioned above viewport with rotation */
+    transform: translateY(-200vh) rotate(8deg);
+    opacity: 1;
+    z-index: 99;
+}
+
+/* Responsive adjustments for ropes */
+@media (max-width: 768px) {
+    .rope {
+        stroke-width: 2;
+    }
+
+    .animated-projects-text {
+        font-size: clamp(40px, 10vw, 100px);
     }
 }

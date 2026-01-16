@@ -180,8 +180,16 @@ function initMouseInteractions() {
     const total = cards.length;
     let order = cards.map((_, i) => i);
     let tl = null;
+    let textTl = null; // Separate timeline for text fading
     let isHovering = false;
     let timeoutId = null;
+
+    // Get project detail elements
+    const projectDetails = [
+        document.querySelector('.project-detail-1'),
+        document.querySelector('.project-detail-2'),
+        document.querySelector('.project-detail-3')
+    ];
 
     const makeSlot = (i) => ({
         x: i * cardDistance,
@@ -196,8 +204,8 @@ function initMouseInteractions() {
             y: slot.y,
             z: slot.z,
             zIndex: slot.zIndex,
-            xPercent: -70,
-            yPercent: -70,
+            xPercent: -60,
+            yPercent: 0,
             skewY: skewAmount,
             transformOrigin: 'center center',
             force3D: true,
@@ -226,10 +234,18 @@ function initMouseInteractions() {
         const elFront = cards[frontIndex];
 
         if (tl && tl.isActive()) tl.kill();
+        if (textTl && textTl.isActive()) textTl.kill();
 
         tl = gsap.timeline({
             onComplete: scheduleNextSwap
         });
+
+        // Create separate timeline for text fading
+        textTl = gsap.timeline();
+
+        // Determine which text to show based on the front card
+        const currentTextIndex = frontIndex;
+        const nextTextIndex = rest[0]; // The card that will come to front
 
         // 1. Drop Front Card Smoothly (1 second)
         // User requested exactly 100px drop
@@ -244,6 +260,13 @@ function initMouseInteractions() {
             ease: "power1.inOut",
             overwrite: "auto"
         });
+
+        // TEXT ANIMATION: Fade out current text as card drops
+        textTl.to(projectDetails[currentTextIndex], {
+            opacity: 0,
+            duration: 0.5,
+            ease: "power2.out"
+        }, 0); // Start immediately
 
         tl.addLabel('promote', `-=${dropDuration * 0.85}`);
 
@@ -264,6 +287,13 @@ function initMouseInteractions() {
                 ease: config.ease
             }, `promote+=${i * 0.1}`);
         });
+
+        // TEXT ANIMATION: Fade in next text as new card comes forward
+        textTl.to(projectDetails[nextTextIndex], {
+            opacity: 1,
+            duration: 0.6,
+            ease: "power2.in"
+        }, 0.4); // Start slightly after fade out begins
 
         // 3. Return Front to Back
         const backSlot = makeSlot(total - 1);
@@ -310,6 +340,7 @@ function initMouseInteractions() {
                 isHovering = true;
                 clearTimeout(timeoutId);
                 if (tl && tl.isActive()) tl.pause();
+                if (textTl && textTl.isActive()) textTl.pause();
             }
         });
 
@@ -320,7 +351,11 @@ function initMouseInteractions() {
                 isHovering = false;
                 if (tl && tl.paused()) {
                     tl.resume();
-                } else {
+                }
+                if (textTl && textTl.paused()) {
+                    textTl.resume();
+                }
+                if (!tl || !tl.isActive()) {
                     scheduleNextSwap();
                 }
             }
@@ -342,3 +377,117 @@ setTimeout(() => {
 
 // Force refresh scroll trigger or layout if needed
 window.dispatchEvent(new Event('resize'));
+
+// ===== ANIMATED PROJECTS TEXT WITH ROPES =====
+
+(function () {
+    // Register ScrollTrigger plugin
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Get elements
+    const text = document.getElementById('projects-text');
+    const leftRope = document.getElementById('left-rope');
+    const rightRope = document.getElementById('right-rope');
+    const projectsSection = document.querySelector('.projects-section');
+
+    if (!text || !leftRope || !rightRope || !projectsSection) return;
+
+    // Function to update rope positions
+    function updateRopePositions() {
+        // Get section position to calculate relative coordinates
+        // SVG is absolute to the section, so (0,0) in SVG is top-left of section.
+        const sectionRect = projectsSection.getBoundingClientRect();
+        const textRect = text.getBoundingClientRect();
+
+        // Calculate Y relative to the section
+        // We want y2 (bottom of rope) to be at the text center
+        const textCenterY = (textRect.top - sectionRect.top) + (textRect.height / 2);
+
+        // Calculate letter width approximately
+        const letterWidth = textRect.width / text.textContent.length;
+
+        // Position ropes to overlap with first and last letters relative to section left
+        // textRect.left is viewport x. sectionRect.left is viewport x.
+        // relativeX = textRect.left - sectionRect.left
+        const relativeLeft = textRect.left - sectionRect.left;
+        const relativeRight = textRect.right - sectionRect.left;
+
+        // Left rope overlaps with 'P' (positioned more towards center of first letter)
+        const leftX = relativeLeft + (letterWidth * 0.3);
+
+        // Right rope overlaps with 'S' (positioned more towards center of last letter)
+        const rightX = relativeRight - (letterWidth * 0.3);
+
+        // Rope Length extending upwards (visually "infinite")
+        const ropeLength = 3000;
+
+        // Set rope positions
+        // y1 is far up (textCenterY - length), y2 is at text
+        leftRope.setAttribute('x1', leftX);
+        leftRope.setAttribute('y1', textCenterY - ropeLength);
+        leftRope.setAttribute('x2', leftX);
+        leftRope.setAttribute('y2', textCenterY);
+
+        rightRope.setAttribute('x1', rightX);
+        rightRope.setAttribute('y1', textCenterY - ropeLength);
+        rightRope.setAttribute('x2', rightX);
+        rightRope.setAttribute('y2', textCenterY);
+    }
+
+    // Initial rope position setup
+    updateRopePositions();
+
+    // Create GSAP timeline with ScrollTrigger
+    const projectsTl = gsap.timeline({
+        scrollTrigger: {
+            trigger: projectsSection,
+            start: "top 80%",
+            end: "top 50%",
+            markers: true,
+            scrub: 3,
+
+        },
+        onUpdate: updateRopePositions // Update ropes during animation
+    });
+
+    // Animation sequence - Smooth bounce effect with reduced durations
+    projectsTl
+        // 1. Drop the text from top with tilt (ropes stretch as it drops)
+        .to(text, {
+            y: 0,
+            rotation: 8, // Keep the tilt while dropping
+            duration: 2,
+            ease: "power2.in",
+            onUpdate: updateRopePositions
+        })
+
+        // 2. Move up slightly with smooth ease (bounce up) - REDUCED DURATION
+        .to(text, {
+            y: -100,
+            rotation: -10, // Swing to opposite side
+            duration: 0.5,
+            ease: "power2.out",
+            onUpdate: updateRopePositions
+        })
+
+        // 3. Come back down smoothly - REDUCED DURATION
+        .to(text, {
+            y: 10,
+            rotation: 3, // Further reduce tilt
+            duration: 0.5,
+            ease: "power1.inOut",
+            onUpdate: updateRopePositions
+        })
+
+        // 4. Straighten the alignment and settle to final position - REDUCED DURATION
+        .to(text, {
+            y: 0,
+            rotation: 0, // Straighten completely
+            duration: 0.35,
+            ease: "power2.out",
+            onUpdate: updateRopePositions
+        });
+
+    // Update rope positions on window resize
+    window.addEventListener('resize', updateRopePositions);
+})();
