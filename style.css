@@ -765,43 +765,154 @@ body.light-theme .scroller-inner img {
 }
 
 /* Skills Section */
+/* Skills Section - Pinned and Animated */
 .skills-section {
-    padding: 4rem 2rem;
-    background: var(--secondary-bg);
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: var(--bg-color);
+    /* Match main bg or use dark/light specific */
+    overflow: hidden;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+}
+
+.skills-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
     align-items: center;
 }
 
-.skills-header h2 {
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
-    font-weight: 500;
-    margin-bottom: 3rem;
+.skills-title {
+    position: absolute;
+    top: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: clamp(3rem, 6vw, 5rem);
+    font-weight: 900;
     text-transform: uppercase;
-    text-align: center;
+    color: var(--text-color);
+    opacity: 0;
+    /* Hidden initially */
+    z-index: 20;
+    font-family: inherit;
+    text-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
 }
 
-.skills-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 2rem;
+.skills-visuals {
+    position: relative;
     width: 100%;
     max-width: 1000px;
+    height: 60vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.skill-card {
-    background: var(--bg-color);
-    padding: 2rem;
-    border-radius: 15px;
-    text-align: center;
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid rgba(128, 128, 128, 0.1);
+/* Center Skill */
+.center-skill {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #333, #000);
+    border-radius: 20px;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    gap: 1rem;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
+    z-index: 10;
+    opacity: 0;
+    /* Hidden initially */
 }
+
+/* Theme adjustments for center skill */
+body.light-theme .center-skill {
+    background: linear-gradient(135deg, #fff, #f0f0f0);
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.center-icon {
+    font-size: 3rem;
+    color: #fff;
+}
+
+body.light-theme .center-icon {
+    color: #333;
+}
+
+/* Side Skills */
+.side-skills {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.skill-item {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(5px);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.8rem;
+    color: var(--text-color);
+    border: 1px solid rgba(128, 128, 128, 0.2);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+
+    /* Position will be handled by CSS vars for distribution, but animation by GSAP */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    /* Base center */
+}
+
+body.light-theme .skill-item {
+    background: rgba(0, 0, 0, 0.03);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+/* Distribute text/items slightly better in the area */
+/* Left Layout */
+.left-skill-item {
+    /* Using calc to position them around. 
+       We'll set final positions via transforms relative to center in GSAP mostly, 
+       or static here and animate 'from'.
+       Let's use static positions here for the "final" state.
+    */
+    margin-left: -200px;
+    /* Offset to left */
+    margin-top: calc(var(--row) * 80px);
+    /* Vertical spread */
+    transform: translate(-50%, -50%) translateX(var(--random-x, 0px));
+}
+
+/* Right Layout */
+.right-skill-item {
+    margin-left: 200px;
+    /* Offset to right */
+    margin-top: calc(var(--row) * 80px);
+    transform: translate(-50%, -50%);
+}
+
+/* Hover effects */
+.skill-item:hover {
+    transform: translate(-50%, -50%) scale(1.1);
+    border-color: var(--accent-color);
+    color: var(--accent-color);
+    z-index: 15;
+}
+
+
 
 .skill-card:hover {
     transform: translateY(-5px);
@@ -1196,7 +1307,7 @@ body.light-theme .scroller-inner img {
     letter-spacing: 0.1em;
     text-transform: uppercase;
     position: relative;
-    font-family: "Fascinate Inline", sans-serif;
+    font-family: "Limelight", sans-serif;
     /* Initial state - positioned above viewport with rotation */
     transform: translateY(-200vh) rotate(8deg);
     opacity: 1;

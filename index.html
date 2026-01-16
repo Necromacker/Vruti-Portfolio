@@ -17,8 +17,9 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fascinate+Inline&family=Limelight&display=swap" rel="stylesheet">
-
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bungee+Inline&family=Fascinate+Inline&family=Limelight&display=swap"
+    rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
@@ -347,35 +348,50 @@
     </div>
   </section>
 
-  <!-- Skills Section (formerly Education) -->
+  <!-- Skills Section -->
   <section class="skills-section" id="skills">
-    <div class="skills-header">
-      <h2>Skills</h2>
-    </div>
-    <div class="skills-grid">
-      <div class="skill-card">
-        <i class="fab fa-html5"></i>
-        <h3>HTML5</h3>
-      </div>
-      <div class="skill-card">
-        <i class="fab fa-css3-alt"></i>
-        <h3>CSS3</h3>
-      </div>
-      <div class="skill-card">
-        <i class="fab fa-js"></i>
-        <h3>JavaScript</h3>
-      </div>
-      <div class="skill-card">
-        <i class="fab fa-react"></i>
-        <h3>React</h3>
-      </div>
-      <div class="skill-card">
-        <i class="fab fa-node"></i>
-        <h3>Node.js</h3>
-      </div>
-      <div class="skill-card">
-        <i class="fab fa-git-alt"></i>
-        <h3>Git</h3>
+    <div class="skills-container">
+      <h2 class="skills-title">Skills & Tools</h2>
+
+      <div class="skills-visuals">
+        <!-- Center Element -->
+        <div class="center-skill">
+          <div class="skill-icon center-icon">
+            <i class="fa-solid fa-code"></i>
+          </div>
+        </div>
+
+        <!-- Left Side Elements -->
+        <div class="side-skills left-skills">
+          <div class="skill-item left-skill-item" style="--i: 1; --row: -1;">
+            <i class="fa-brands fa-html5"></i>
+          </div>
+          <div class="skill-item left-skill-item" style="--i: 2; --row: 0;">
+            <i class="fa-brands fa-css3-alt"></i>
+          </div>
+          <div class="skill-item left-skill-item" style="--i: 3; --row: 1;">
+            <i class="fa-brands fa-js"></i>
+          </div>
+          <div class="skill-item left-skill-item" style="--i: 4; --row: 2;">
+            <i class="fa-brands fa-git-alt"></i>
+          </div>
+        </div>
+
+        <!-- Right Side Elements -->
+        <div class="side-skills right-skills">
+          <div class="skill-item right-skill-item" style="--i: 1; --row: -1;">
+            <i class="fa-brands fa-react"></i>
+          </div>
+          <div class="skill-item right-skill-item" style="--i: 2; --row: 0;">
+            <i class="fa-brands fa-node"></i>
+          </div>
+          <div class="skill-item right-skill-item" style="--i: 3; --row: 1;">
+            <i class="fa-brands fa-figma"></i>
+          </div>
+          <div class="skill-item right-skill-item" style="--i: 4; --row: 2;">
+            <i class="fa-brands fa-wordpress"></i>
+          </div>
+        </div>
       </div>
     </div>
   </section>

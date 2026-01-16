@@ -446,6 +446,7 @@ window.dispatchEvent(new Event('resize'));
             markers: true,
             scrub: 3,
 
+
         },
         onUpdate: updateRopePositions // Update ropes during animation
     });
@@ -491,3 +492,74 @@ window.dispatchEvent(new Event('resize'));
     // Update rope positions on window resize
     window.addEventListener('resize', updateRopePositions);
 })();
+
+// ===== SKILLS SECTION ANIMATION =====
+(function () {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const skillsSection = document.querySelector('.skills-section');
+    const container = document.querySelector('.skills-container');
+    const centerSkill = document.querySelector('.center-skill');
+    const leftSkills = document.querySelectorAll('.left-skill-item');
+    const rightSkills = document.querySelectorAll('.right-skill-item');
+    const title = document.querySelector('.skills-title');
+
+    if (!skillsSection || !centerSkill) return;
+
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: skillsSection,
+            start: "top top",
+            end: "+=2000",
+            pin: true,
+            scrub: 1,
+            // markers: true // Enable for debugging
+        }
+    });
+
+    // 1. Center element fades in bit by bit
+    tl.to(centerSkill, {
+        opacity: 1,
+        duration: 1,
+        ease: "power1.inOut"
+    });
+
+    // 2. Left side elements slide in, fade in, and align from initial rotation
+    // We animate from "off" state to "final" state defined in CSS (which is the aligned state)
+    // But since CSS has unique positions, we need to decide if we animate TO them or FROM an offset.
+    // 'from' is easier if we want them to land in their CSS-defined spots.
+
+    tl.from(leftSkills, {
+        x: -200,      // Slide in from further left
+        opacity: 0,
+        rotation: -45, // Rotate to 0
+        stagger: 0.1,
+        duration: 1.5,
+        ease: "power2.out"
+    }, "-=0.2"); // Overlap slightly
+
+    // 3. Right side elements slide in, fade in, and align from initial rotation
+    tl.from(rightSkills, {
+        x: 200,       // Slide in from further right
+        opacity: 0,
+        rotation: 45, // Rotate to 0
+        stagger: 0.1,
+        duration: 1.5,
+        ease: "power2.out"
+    }, "<"); // Start same time as left skills
+
+    // 4. Text fades in
+    tl.to(title, {
+        opacity: 1,
+        y: 0,
+        duration: 1,
+        ease: "power2.out"
+    });
+
+    // Optional: Add a subtle float animation to all skills after they appear
+    // We need a separate timeline that runs continuously, not scrubbed
+    // But since the section is pinned, we can't easily have infinite animation independent of scroll if the loop is simpler.
+    // Let's just stick to the requested scroll timeline for now.
+
+})();
+
