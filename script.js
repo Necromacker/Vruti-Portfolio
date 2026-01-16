@@ -529,24 +529,27 @@ window.dispatchEvent(new Event('resize'));
     // But since CSS has unique positions, we need to decide if we animate TO them or FROM an offset.
     // 'from' is easier if we want them to land in their CSS-defined spots.
 
+    // 2. Left side elements slide in first
     tl.from(leftSkills, {
-        x: -200,      // Slide in from further left
+        x: -300,  // Constant start position (closer)
+        y: (i) => (i % 2 === 0 ? -100 : 100), // Only Y changes
         opacity: 0,
-        rotation: -45, // Rotate to 0
-        stagger: 0.1,
+        rotation: -45,
+        stagger: 0.2,
         duration: 1.5,
         ease: "power2.out"
-    }, "-=0.2"); // Overlap slightly
+    }, "-=0.2");
 
-    // 3. Right side elements slide in, fade in, and align from initial rotation
+    // 3. Right side elements slide in overlapping with left side
     tl.from(rightSkills, {
-        x: 200,       // Slide in from further right
+        x: 700, // Must be greater than max CSS transform (350%) to ensure Right->Left movement
+        y: (i) => (i % 2 === 0 ? -100 : 100), // Match left side vertical variation
         opacity: 0,
-        rotation: 45, // Rotate to 0
+        rotation: 45,
         stagger: 0.1,
         duration: 1.5,
         ease: "power2.out"
-    }, "<"); // Start same time as left skills
+    }, "-=1.0"); // Overlap: start 1 second before left finishes
 
 
 

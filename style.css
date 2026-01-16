@@ -40,7 +40,7 @@ body {
 .navbar {
     position: fixed;
     top: 20px;
-    left: 2.5%;
+    left: 50%;
     transform: translateX(-50%);
     width: 95vw;
     min-width: 380px;
@@ -912,26 +912,26 @@ body.light-theme .skill-item {
 /* Right Layout - Scattered Positions */
 .right-skill-item:nth-child(1) {
     top: 15%;
-    right: 35%;
-    transform: translate(50%, -50%);
+    right: 25%;
+    transform: translate(350%, -30%);
 }
 
 .right-skill-item:nth-child(2) {
-    top: 30%;
-    right: 10%;
-    transform: translate(50%, -50%);
+    top: 45%;
+    right: 5%;
+    transform: translate(100%, -100%);
 }
 
 .right-skill-item:nth-child(3) {
-    top: 65%;
-    right: 35%;
-    transform: translate(50%, -50%);
+    top: 60%;
+    right: 30%;
+    transform: translate(300%, -50%);
 }
 
 .right-skill-item:nth-child(4) {
-    top: 80%;
+    top: 85%;
     right: 15%;
-    transform: translate(50%, -50%);
+    transform: translate(150%, -50%);
 }
 
 /* Hover effects */
