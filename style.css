@@ -40,7 +40,7 @@ body {
 .navbar {
     position: fixed;
     top: 20px;
-    left: 50%;
+    left: 2.5%;
     transform: translateX(-50%);
     width: 95vw;
     min-width: 380px;
@@ -797,11 +797,11 @@ body.light-theme .scroller-inner img {
     font-weight: 900;
     text-transform: uppercase;
     color: var(--text-color);
-    opacity: 0;
-    /* Hidden initially */
+    /* Visible initially */
     z-index: 20;
     font-family: inherit;
     text-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    opacity: 1;
 }
 
 .skills-visuals {
@@ -856,18 +856,17 @@ body.light-theme .center-icon {
 
 .skill-item {
     position: absolute;
-    width: 60px;
-    height: 60px;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(5px);
-    border-radius: 12px;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #333, #000);
+    border-radius: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1.8rem;
-    color: var(--text-color);
-    border: 1px solid rgba(128, 128, 128, 0.2);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    font-size: 3rem;
+    color: #fff;
+    border: none;
+    box-shadow: 0 0 30px rgba(255, 255, 255, 0.1);
 
     /* Position will be handled by CSS vars for distribution, but animation by GSAP */
     top: 50%;
@@ -877,31 +876,62 @@ body.light-theme .center-icon {
 }
 
 body.light-theme .skill-item {
-    background: rgba(0, 0, 0, 0.03);
-    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: linear-gradient(135deg, #fff, #f0f0f0);
+    color: #333;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-/* Distribute text/items slightly better in the area */
-/* Left Layout */
-.left-skill-item {
-    /* Using calc to position them around. 
-       We'll set final positions via transforms relative to center in GSAP mostly, 
-       or static here and animate 'from'.
-       Let's use static positions here for the "final" state.
-    */
-    margin-left: -200px;
-    /* Offset to left */
-    margin-top: calc(var(--row) * 80px);
-    /* Vertical spread */
-    transform: translate(-50%, -50%) translateX(var(--random-x, 0px));
-}
+/* Using specific positioning for random scattered look */
 
-/* Right Layout */
-.right-skill-item {
-    margin-left: 200px;
-    /* Offset to right */
-    margin-top: calc(var(--row) * 80px);
+/* Left Layout - Scattered Positions */
+.left-skill-item:nth-child(1) {
+    top: 15%;
+    left: 10%;
     transform: translate(-50%, -50%);
+}
+
+.left-skill-item:nth-child(2) {
+    top: 30%;
+    left: 35%;
+    transform: translate(-50%, -50%);
+}
+
+.left-skill-item:nth-child(3) {
+    top: 65%;
+    left: 15%;
+    transform: translate(-50%, -50%);
+}
+
+.left-skill-item:nth-child(4) {
+    top: 80%;
+    left: 40%;
+    transform: translate(-50%, -50%);
+}
+
+/* Right Layout - Scattered Positions */
+.right-skill-item:nth-child(1) {
+    top: 15%;
+    right: 35%;
+    transform: translate(50%, -50%);
+}
+
+.right-skill-item:nth-child(2) {
+    top: 30%;
+    right: 10%;
+    transform: translate(50%, -50%);
+}
+
+.right-skill-item:nth-child(3) {
+    top: 65%;
+    right: 35%;
+    transform: translate(50%, -50%);
+}
+
+.right-skill-item:nth-child(4) {
+    top: 80%;
+    right: 15%;
+    transform: translate(50%, -50%);
 }
 
 /* Hover effects */

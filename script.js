@@ -548,13 +548,7 @@ window.dispatchEvent(new Event('resize'));
         ease: "power2.out"
     }, "<"); // Start same time as left skills
 
-    // 4. Text fades in
-    tl.to(title, {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        ease: "power2.out"
-    });
+
 
     // Optional: Add a subtle float animation to all skills after they appear
     // We need a separate timeline that runs continuously, not scrubbed
