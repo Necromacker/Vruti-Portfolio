@@ -21,6 +21,11 @@
     href="https://fonts.googleapis.com/css2?family=Bungee+Inline&family=Fascinate+Inline&family=Limelight&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bitcount+Prop+Single:wght@100..900&family=Fugaz+One&family=Noto+Sans+Devanagari:wght@100..900&family=Ovo&display=swap"
+    rel="stylesheet">
 </head>
 
 <body class="light-theme">
@@ -357,7 +362,11 @@
         <!-- Center Element -->
         <div class="center-skill">
           <div class="skill-icon center-icon">
-            <i class="fa-solid fa-code"></i>
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"
+              style="width: 100%; height: 100%; fill: currentColor;">
+              <text x="50" y="55" font-family="Arial, sans-serif" font-size="32" font-weight="bold" text-anchor="middle"
+                dominant-baseline="middle">GSAP</text>
+            </svg>
           </div>
         </div>
 
@@ -380,18 +389,51 @@
         <!-- Right Side Elements -->
         <div class="side-skills right-skills">
           <div class="skill-item right-skill-item" style="--i: 1; --row: -1;">
-            <i class="fa-brands fa-react"></i>
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"
+              style="width: 100%; height: 100%; fill: currentColor;">
+              <text x="50" y="55" font-family="monospace" font-size="40" font-weight="bold" text-anchor="middle"
+                dominant-baseline="middle">C++</text>
+            </svg>
           </div>
           <div class="skill-item right-skill-item" style="--i: 2; --row: 0;">
             <i class="fa-brands fa-node"></i>
           </div>
           <div class="skill-item right-skill-item" style="--i: 3; --row: 1;">
-            <i class="fa-brands fa-figma"></i>
+            <i class="fa-brands fa-python"></i>
           </div>
           <div class="skill-item right-skill-item" style="--i: 4; --row: 2;">
-            <i class="fa-brands fa-wordpress"></i>
+            <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"
+              style="width: 100%; height: 100%; fill: currentColor;">
+              <text x="50" y="55" font-family="monospace" font-size="48" font-weight="bold" text-anchor="middle"
+                dominant-baseline="middle">C</text>
+            </svg>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="contact-section" id="contact">
+    <div class="hand-container">
+      <img src="hand.png" alt="3D Hand" class="hand-image">
+    </div>
+    <div class="contact-content">
+      <div class="contact-left">
+        <h2 class="contact-heading">just<br>send it.</h2>
+      </div>
+      <div class="contact-right">
+        <form class="contact-form">
+          <div class="form-group">
+            <label for="name" class="sr-only">Name</label>
+            <input type="text" id="name" name="name" placeholder="Name" required autocomplete="off">
+          </div>
+          <div class="form-group">
+            <label for="message" class="sr-only">Message</label>
+            <textarea id="message" name="message" placeholder="Message" required></textarea>
+          </div>
+          <button type="submit" class="submit-btn">Send</button>
+        </form>
       </div>
     </div>
   </section>

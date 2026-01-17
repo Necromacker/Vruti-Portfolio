@@ -40,7 +40,7 @@ body {
 .navbar {
     position: fixed;
     top: 20px;
-    left: 50%;
+    left: 2.5%;
     transform: translateX(-50%);
     width: 95vw;
     min-width: 380px;
@@ -1337,7 +1337,7 @@ body.light-theme .skill-item {
     letter-spacing: 0.1em;
     text-transform: uppercase;
     position: relative;
-    font-family: "Limelight", sans-serif;
+    font-family: "Noto Sans Devanagari", sans-serif;
     /* Initial state - positioned above viewport with rotation */
     transform: translateY(-200vh) rotate(8deg);
     opacity: 1;
@@ -1352,5 +1352,188 @@ body.light-theme .skill-item {
 
     .animated-projects-text {
         font-size: clamp(40px, 10vw, 100px);
+    }
+}
+
+/* Contact Section */
+.contact-section {
+    position: relative;
+    min-height: 100vh;
+    background-color: #000000;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 0 5vw;
+    z-index: 20;
+}
+
+.hand-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 450px;
+    max-width: 100%;
+    z-index: 10;
+    pointer-events: none;
+    /* Hand starts hidden above by default if JS fails, but we want JS to control it. 
+       We'll set initial state in JS or via a class. */
+}
+
+.hand-image {
+    width: 80%;
+    height: 80%;
+    display: block;
+    /* We'll use JS to set the initial Y position */
+}
+
+.contact-content {
+    position: relative;
+    z-index: 30;
+    /* Above the hand */
+    display: flex;
+    width: 100%;
+    max-width: 1500px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4rem;
+}
+
+.contact-left {
+    flex: 1;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.contact-heading {
+    font-family: var(--font-family);
+    font-size: clamp(4rem, 10vw, 10rem);
+    font-weight: 700;
+    line-height: 0.9;
+    color: #ffffff;
+    opacity: 0;
+    letter-spacing: -3px;
+    margin: 0;
+    text-align: center;
+}
+
+.contact-right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.contact-form {
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+
+.form-group {
+    position: relative;
+    width: 100%;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.contact-form input,
+.contact-form textarea {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    font-size: 1.25rem;
+    padding: 1rem 0;
+    font-family: inherit;
+    resize: none;
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+.contact-form input:focus,
+.contact-form textarea:focus {
+    outline: none;
+    border-bottom-color: #ffffff;
+}
+
+.contact-form textarea {
+    min-height: 100px;
+}
+
+.submit-btn {
+    align-self: flex-start;
+    padding: 1rem 2.5rem;
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 999px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0;
+}
+
+.submit-btn:hover {
+    background: #ffffff;
+    color: #000000;
+    transform: scale(1.02);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 900px) {
+    .contact-content {
+        flex-direction: column;
+        align-items: center;
+        /* Center everything on mobile */
+        text-align: center;
+        gap: 2rem;
+        padding-top: 100px;
+        /* Space for hand */
+    }
+
+    .contact-left {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .contact-heading {
+        text-align: center;
+        font-size: 5rem;
+    }
+
+    .contact-right {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .contact-form {
+        max-width: 400px;
+    }
+
+    .hand-container {
+        width: 300px;
+    }
+
+    .submit-btn {
+        align-self: center;
+        /* Center button on mobile */
     }
 }

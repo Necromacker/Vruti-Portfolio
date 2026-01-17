@@ -560,3 +560,65 @@ window.dispatchEvent(new Event('resize'));
 
 })();
 
+
+// ===== CONTACT SECTION ANIMATION =====
+(function () {
+    const contactSection = document.querySelector('.contact-section');
+    const handImage = document.querySelector('.hand-image');
+    const contactHeading = document.querySelector('.contact-heading');
+    const formInputs = document.querySelectorAll('.contact-form input, .contact-form textarea');
+    const submitBtn = document.querySelector('.submit-btn');
+
+    if (!contactSection || !handImage) return;
+
+    // Initial States
+    gsap.set(handImage, { yPercent: -100 });
+    gsap.set(contactHeading, { autoAlpha: 0, x: -30, filter: "blur(10px)" }); // Reduced x offset, added blur
+    gsap.set(formInputs, { autoAlpha: 0, y: 20 });
+    gsap.set(submitBtn, { autoAlpha: 0, y: 20 });
+
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: contactSection,
+            start: "top 60%", // Start when contact section is 60% in view
+            end: "bottom bottom",
+            toggleActions: "play none none none", // Play once
+            once: true // Ensure it only triggers once
+        }
+    });
+
+    // 1. Hand enters slowly from top
+    tl.to(handImage, {
+        yPercent: -5, // Move fully into view (leaving small overlap to avoid gap)
+        duration: 2.5,
+        ease: "power2.out"
+    });
+
+    // 2. "just send it." text fades in smoothly with blur
+    tl.to(contactHeading, {
+        autoAlpha: 1,
+        x: 0,
+        filter: "blur(0px)",
+        duration: 2,
+        ease: "power2.inOut"
+    }, "-=1.0"); // Start 1.5s into the timeline (delay)
+
+    // 3. Inputs fade/slide in subtly
+    tl.to(formInputs, {
+        autoAlpha: 1,
+        y: 0,
+        stagger: 0.2,
+        duration: 1,
+        ease: "power2.out"
+    }, "-=1");
+
+    // 4. Submit button fades in
+    tl.to(submitBtn, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 1,
+        ease: "power2.out"
+    }, "-=0.5");
+
+})();
+
