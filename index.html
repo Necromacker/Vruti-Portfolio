@@ -415,23 +415,37 @@
 
   <!-- Contact Section -->
   <div class="contact-body">
+    <div class="hand-container">
+      <img src="hand.png" alt="3D Hand" class="hand-image">
+    </div>
     <section class="contact-section" id="contact">
-      <div class="hand-container">
-        <img src="hand.png" alt="3D Hand" class="hand-image">
-      </div>
+
       <div class="contact-content">
         <div class="contact-left">
           <h2 class="contact-heading">just<br>send it.</h2>
         </div>
         <div class="contact-right">
           <form class="contact-form">
-            <div class="form-group">
-              <label for="name" class="sr-only">Name</label>
-              <input type="text" id="name" name="name" placeholder="Name" required autocomplete="off">
+            <div class="nebula-input">
+              <input required="" type="text" name="name" id="name" autocomplete="off" class="input" />
+              <label class="user-label" for="name">Name</label>
+              <div class="nebula-particle" style="--x:0.2; --y:-0.4; --delay:0.1s"></div>
+              <div class="nebula-particle" style="--x:0.5; --y:-0.2; --delay:0.3s"></div>
+              <div class="nebula-particle" style="--x:0.3; --y:0.3; --delay:0.5s"></div>
+              <div class="nebula-particle" style="--x:0.7; --y:0.1; --delay:0.2s"></div>
+              <div class="nebula-particle" style="--x:0.1; --y:-0.7; --delay:0.4s"></div>
+              <div class="nebula-particle" style="--x:0.6; --y:0.4; --delay:0.6s"></div>
             </div>
-            <div class="form-group">
-              <label for="message" class="sr-only">Message</label>
-              <textarea id="message" name="message" placeholder="Message" required></textarea>
+            <div class="nebula-input">
+              <textarea required="" name="message" id="message" class="input"
+                style="min-height: 100px; resize: vertical;"></textarea>
+              <label class="user-label" for="message">Message</label>
+              <div class="nebula-particle" style="--x:0.2; --y:-0.4; --delay:0.1s"></div>
+              <div class="nebula-particle" style="--x:0.5; --y:-0.2; --delay:0.3s"></div>
+              <div class="nebula-particle" style="--x:0.3; --y:0.3; --delay:0.5s"></div>
+              <div class="nebula-particle" style="--x:0.7; --y:0.1; --delay:0.2s"></div>
+              <div class="nebula-particle" style="--x:0.1; --y:-0.7; --delay:0.4s"></div>
+              <div class="nebula-particle" style="--x:0.6; --y:0.4; --delay:0.6s"></div>
             </div>
             <button type="submit" class="submit-btn">Send</button>
           </form>

@@ -566,7 +566,8 @@ window.dispatchEvent(new Event('resize'));
     const contactSection = document.querySelector('.contact-section');
     const handImage = document.querySelector('.hand-image');
     const contactHeading = document.querySelector('.contact-heading');
-    const formInputs = document.querySelectorAll('.contact-form input, .contact-form textarea');
+    // Select the wrapper .nebula-input so we animate the whole block
+    const formItems = document.querySelectorAll('.nebula-input');
     const submitBtn = document.querySelector('.submit-btn');
 
     if (!contactSection || !handImage) return;
@@ -574,7 +575,7 @@ window.dispatchEvent(new Event('resize'));
     // Initial States
     gsap.set(handImage, { yPercent: -100 });
     gsap.set(contactHeading, { autoAlpha: 0, x: -30, filter: "blur(10px)" }); // Reduced x offset, added blur
-    gsap.set(formInputs, { autoAlpha: 0, y: 20 });
+    gsap.set(formItems, { autoAlpha: 0, y: 20 });
     gsap.set(submitBtn, { autoAlpha: 0, y: 20 });
 
     const tl = gsap.timeline({
@@ -589,8 +590,8 @@ window.dispatchEvent(new Event('resize'));
 
     // 1. Hand enters slowly from top
     tl.to(handImage, {
-        yPercent: -5, // Move fully into view (leaving small overlap to avoid gap)
-        duration: 2.5,
+        y: 50, // Move fully into view (leaving small overlap to avoid gap)
+        duration: 1.5,
         ease: "power2.out"
     });
 
@@ -599,12 +600,12 @@ window.dispatchEvent(new Event('resize'));
         autoAlpha: 1,
         x: 0,
         filter: "blur(0px)",
-        duration: 2,
+        duration: 1,
         ease: "power2.inOut"
     }, "-=1.0"); // Start 1.5s into the timeline (delay)
 
     // 3. Inputs fade/slide in subtly
-    tl.to(formInputs, {
+    tl.to(formItems, {
         autoAlpha: 1,
         y: 0,
         stagger: 0.2,

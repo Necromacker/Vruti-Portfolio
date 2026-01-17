@@ -40,7 +40,7 @@ body {
 .navbar {
     position: fixed;
     top: 20px;
-    left: 2.5%;
+    left: 50%;
     transform: translateX(-50%);
     width: 95vw;
     min-width: 380px;
@@ -1181,10 +1181,8 @@ body.light-theme .skill-item {
 }
 
 /* 1. Animation Area (Top) */
-/* Modified in later block, but ensuring specific styles here */
 .projects-animation-container {
     position: relative !important;
-    /* Change from absolute to relative to take up flow space */
     width: 100%;
     height: 45vh;
     /* Reserved space for huge text */
@@ -1229,7 +1227,6 @@ body.light-theme .skill-item {
     opacity: 0;
 }
 
-/* Show only the first project detail initially */
 .project-detail-1 {
     opacity: 1;
 }
@@ -1320,8 +1317,6 @@ body.light-theme .skill-item {
     opacity: 0.9;
 }
 
-/* Container for the animated PROJECTS text - Layout handled above */
-/* Additional tweaks if needed */
 .projects-text-wrapper {
     position: relative;
     display: flex;
@@ -1356,7 +1351,8 @@ body.light-theme .skill-item {
 /* Contact Section */
 .contact-section {
     position: relative;
-    min-height: 100vh;
+    height: 90vh;
+    margin-bottom: 0vh;
     background-color: #000000;
     color: #ffffff;
     display: flex;
@@ -1372,26 +1368,25 @@ body.light-theme .skill-item {
 }
 
 .hand-container {
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
+    height: 0px;
     width: 450px;
     max-width: 100%;
-    z-index: 10;
+    z-index: 30;
     pointer-events: none;
-    /* Hand starts hidden above by default if JS fails, but we want JS to control it. 
-       We'll set initial state in JS or via a class. */
 }
 
 .hand-image {
-    width: 80%;
-    height: 80%;
+
+    position: relative;
+    top: 20vh;
+    width: 100%;
+
     display: block;
     /* We'll use JS to set the initial Y position */
 }
 
 .contact-content {
+
     position: relative;
     z-index: 30;
     /* Above the hand */
@@ -1408,7 +1403,7 @@ body.light-theme .skill-item {
 
 .contact-heading {
     font-family: var(--font-family);
-    font-size: clamp(4rem, 9vw, 10rem);
+    font-size: clamp(4rem, 8.5vw, 10rem);
     font-weight: 700;
     line-height: 0.9;
     color: #ffffff;
@@ -1429,46 +1424,95 @@ body.light-theme .skill-item {
     gap: 3rem;
 }
 
-.form-group {
+
+/* Nebula Input Styles */
+.nebula-input {
     position: relative;
     width: 100%;
+    /* Changed from 250px to 100% */
+    margin: 0;
+    /* Removed margin to let gap handle spacing */
 }
 
-.sr-only {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    margin: -1px;
-    overflow: hidden;
-    clip: rect(0, 0, 0, 0);
-    white-space: nowrap;
-    border-width: 0;
-}
-
-.contact-form input,
-.contact-form textarea {
+.nebula-input .input {
     width: 100%;
-    background: transparent;
-    border: none;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    color: #ffffff;
-    font-size: 1.25rem;
-    padding: 1rem 0;
-    font-family: inherit;
-    resize: none;
-    transition: all 0.3s ease;
-    opacity: 0;
-}
-
-.contact-form input:focus,
-.contact-form textarea:focus {
+    padding: 15px;
+    border: 2px solid #2a2a3a;
+    background: #00000f;
+    color: white;
+    font-size: 16px;
     outline: none;
-    border-bottom-color: #ffffff;
+    border-radius: 8px;
+    transition: all 0.4s ease-out;
+    font-family: inherit;
+    /* Ensure font matches */
 }
 
-.contact-form textarea {
-    min-height: 100px;
+.nebula-input .user-label {
+    position: absolute;
+    left: 15px;
+    top: 15px;
+    pointer-events: none;
+    color: #6a6a8a;
+    transition: all 0.4s ease-out;
+    background: #00000f;
+    padding: 0 5px;
+}
+
+.nebula-input .input:focus {
+    border-color: #ffffff;
+    box-shadow:
+        0 5px 8px rgba(255, 255, 255, 0.3),
+        0 10px 20px rgba(255, 255, 255, 0.2),
+        0 15px 40px rgba(255, 255, 255, 0.15),
+        0 20px 60px rgba(255, 255, 255, 0.1);
+}
+
+.nebula-input .input:focus~.user-label,
+.nebula-input .input:valid~.user-label {
+    transform: translateY(-25px);
+    font-size: 12px;
+    color: #ffffff;
+    left: 10px;
+}
+
+/* Specific fix for textarea processing 'valid' state might differ if empty. 
+   Input required + valid works. Textarea required + valid works. */
+
+.nebula-particle {
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    top: 50%;
+    left: 10px;
+    filter: blur(0.8px);
+    mix-blend-mode: screen;
+    transition: opacity 0.3s ease;
+}
+
+.nebula-input .input:focus~.nebula-particle {
+    animation: nebula-float 2s forwards ease-out;
+}
+
+@keyframes nebula-float {
+    0% {
+        transform: translate(0, -50%) scale(0.8);
+        opacity: 0;
+        background: #ffffff;
+    }
+
+    20% {
+        opacity: 0.8;
+    }
+
+    100% {
+        transform: translate(calc(var(--x) * 140px), calc(var(--y) * 35px)) scale(1.1);
+        opacity: 0;
+        background: #ffffff;
+    }
 }
 
 .submit-btn {
@@ -1499,6 +1543,8 @@ body.light-theme .skill-item {
     justify-content: center;
     align-items: center;
     width: 100%;
+    height: 100vh;
+    flex-direction: column;
 }
 
 @media (max-width: 900px) {
