@@ -786,13 +786,11 @@ body.light-theme .scroller-inner img {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
 }
 
 .skills-title {
-    position: absolute;
-    top: 15%;
-    left: 50%;
-    transform: translateX(-50%);
+
     font-size: clamp(3rem, 6vw, 5rem);
     font-weight: 900;
     text-transform: uppercase;
@@ -1367,6 +1365,10 @@ body.light-theme .skill-item {
     overflow: hidden;
     padding: 0 5vw;
     z-index: 20;
+    width: 95%;
+    border-radius: 3rem;
+
+
 }
 
 .hand-container {
@@ -1394,22 +1396,19 @@ body.light-theme .skill-item {
     z-index: 30;
     /* Above the hand */
     display: flex;
-    width: 100%;
-    max-width: 1500px;
-    align-items: center;
+    width: 90%;
+    align-items: start;
     justify-content: space-between;
-    gap: 4rem;
+    margin-top: 8rem;
 }
 
 .contact-left {
-    flex: 1;
-    display: flex;
-    justify-content: flex-start;
+    width: 35%;
 }
 
 .contact-heading {
     font-family: var(--font-family);
-    font-size: clamp(4rem, 10vw, 10rem);
+    font-size: clamp(4rem, 9vw, 10rem);
     font-weight: 700;
     line-height: 0.9;
     color: #ffffff;
@@ -1420,14 +1419,11 @@ body.light-theme .skill-item {
 }
 
 .contact-right {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
+    width: 55%;
 }
 
 .contact-form {
     width: 100%;
-    max-width: 500px;
     display: flex;
     flex-direction: column;
     gap: 3rem;
@@ -1496,6 +1492,13 @@ body.light-theme .skill-item {
     color: #000000;
     transform: scale(1.02);
     box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+.contact-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
 }
 
 @media (max-width: 900px) {
