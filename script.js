@@ -9,14 +9,18 @@ const themeToggle = document.getElementById('themeToggle');
 const body = document.body;
 
 // Theme Toggle Logic
+const handImage = document.querySelector('.hand-image');
+
 themeToggle.addEventListener('change', () => {
     body.classList.toggle('dark-theme');
     body.classList.toggle('light-theme');
 
     if (body.classList.contains('dark-theme')) {
         img1.src = 'coder-dark.png';
+        if (handImage) handImage.src = 'hand.png';
     } else {
         img1.src = 'coder-light.png';
+        if (handImage) handImage.src = 'hand-dark.png';
     }
 });
 
