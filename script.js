@@ -443,7 +443,7 @@ window.dispatchEvent(new Event('resize'));
             trigger: projectsSection,
             start: "top 80%",
             end: "top 50%",
-            markers: true,
+
             scrub: 3,
 
 
@@ -455,7 +455,7 @@ window.dispatchEvent(new Event('resize'));
     projectsTl
         // 1. Drop the text from top with tilt (ropes stretch as it drops)
         .to(text, {
-            y: 0,
+            y: -50,
             rotation: 8, // Keep the tilt while dropping
             duration: 2,
             ease: "power2.in",
@@ -473,7 +473,7 @@ window.dispatchEvent(new Event('resize'));
 
         // 3. Come back down smoothly - REDUCED DURATION
         .to(text, {
-            y: 10,
+            y: -40,
             rotation: 3, // Further reduce tilt
             duration: 0.5,
             ease: "power1.inOut",
@@ -482,7 +482,7 @@ window.dispatchEvent(new Event('resize'));
 
         // 4. Straighten the alignment and settle to final position - REDUCED DURATION
         .to(text, {
-            y: 0,
+            y: -50,
             rotation: 0, // Straighten completely
             duration: 0.35,
             ease: "power2.out",

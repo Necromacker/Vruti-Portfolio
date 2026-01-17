@@ -378,7 +378,7 @@ p {
     /* Reduced from 0.9rem / 1.5vw */
     line-height: 1.5;
     color: #888;
-    max-width: 280px;
+
     font-weight: 300;
     text-align: center;
 }
@@ -1054,6 +1054,7 @@ body.light-theme .skill-item {
 }
 
 .card-header {
+    width: 100%;
     height: 48px;
     display: flex;
     align-items: center;
@@ -1305,7 +1306,7 @@ body.light-theme .skill-item {
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 100;
+    z-index: 5;
 }
 
 /* Rope styling */
@@ -1315,6 +1316,7 @@ body.light-theme .skill-item {
     stroke-linecap: round;
     fill: none;
     opacity: 0.9;
+    z-index: 1;
 }
 
 .projects-text-wrapper {
@@ -1324,9 +1326,14 @@ body.light-theme .skill-item {
 }
 
 .animated-projects-text {
-    font-size: clamp(60px, 12vw, 150px);
+    font-size: clamp(60px, 7vw, 150px);
     font-weight: 900;
-    color: #ffffff;
+    background-color: rgb(255, 255, 255);
+    padding: 1rem 3rem;
+    border-bottom-right-radius: 5rem;
+    border-bottom-left-radius: 5rem;
+    padding-bottom: 0rem;
+    color: black;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     position: relative;
