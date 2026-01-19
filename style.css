@@ -107,7 +107,7 @@ body {
 .navbar {
     position: fixed;
     top: 20px;
-    left: 50%;
+    left: 2.5%;
     transform: translateX(-50%);
     width: 95vw;
     min-width: 380px;
@@ -547,7 +547,7 @@ body.light-theme .scroller-inner img {
     font-weight: 500;
     line-height: 1.1;
     margin-bottom: 5rem;
-    font-family: inherit;
+    font-family: "Bungee Inline", "Static", sans-serif;
     letter-spacing: -1px;
     text-transform: uppercase;
 }
@@ -864,7 +864,7 @@ body.light-theme .scroller-inner img {
     color: var(--text-color);
     /* Visible initially */
     z-index: 20;
-    font-family: inherit;
+    font-family: "Rubik Dirt", system-ui;
     letter-spacing: -1px;
     text-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     opacity: 1;
@@ -1006,6 +1006,28 @@ body.light-theme .skill-item {
     border-color: var(--accent-color);
     color: var(--accent-color);
     z-index: 15;
+}
+
+.skill-name {
+    position: absolute;
+    bottom: -40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text-color);
+    opacity: 0;
+    /* Hidden initially */
+    white-space: nowrap;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+body.light-theme .skill-name {
+    color: #333;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    font-weight: 600;
 }
 
 
@@ -1396,7 +1418,7 @@ body.light-theme .skill-item {
 }
 
 .animated-projects-text {
-    font-size: clamp(60px, 7vw, 150px);
+    font-size: clamp(60px, 5vw, 150px);
     font-weight: 900;
     background-color: var(--about-bg-color);
     padding: 1rem 3rem;

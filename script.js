@@ -154,6 +154,63 @@ function initMouseInteractions() {
     });
 }
 
+
+
+// ===== ABOUT SECTION ANIMATION =====
+(function () {
+    // Register ScrollTrigger if not already done globally
+    gsap.registerPlugin(ScrollTrigger);
+
+    const aboutSection = document.querySelector('.about-section');
+    const stars = document.querySelectorAll('.about-stars .star');
+    const header = document.querySelector('.about-header-main h2');
+    const aboutCols = document.querySelectorAll('.about-grid-new .about-col');
+
+    if (!aboutSection) return;
+
+    const tl = gsap.timeline({
+        scrollTrigger: {
+            trigger: aboutSection,
+            start: "top 80%", // Start animation when top of section hits 80% viewport height
+            end: "bottom center",
+            toggleActions: "play none none reverse" // Re-play on enter/leave
+        }
+    });
+
+    // 1. Stars pop in and rotate
+    if (stars.length > 0) {
+        tl.from(stars, {
+            scale: 0,
+            rotation: -180,
+            duration: 0.8,
+            ease: "back.out(1.7)",
+            stagger: 0.2
+        });
+    }
+
+    // 2. Header fades up
+    if (header) {
+        tl.from(header, {
+            y: 50,
+            opacity: 0,
+            duration: 0.8,
+            ease: "power2.out"
+        }, "-=0.4");
+    }
+
+    // 3. Columns stagger in
+    if (aboutCols.length > 0) {
+        tl.from(aboutCols, {
+            y: 100,
+            opacity: 0,
+            duration: 0.8,
+            stagger: 0.2,
+            ease: "power2.out"
+        }, "-=0.4");
+    }
+
+})();
+
 // --- Card Swap Animation Logic (Ported from React) ---
 
 // --- Card Swap Animation Logic ---
@@ -553,7 +610,16 @@ window.dispatchEvent(new Event('resize'));
         stagger: 0.1,
         duration: 1.5,
         ease: "power2.out"
+
     }, "-=1.0"); // Overlap: start 1 second before left finishes
+
+    // 4. Fade in all skill names after visuals settle
+    const skillNames = document.querySelectorAll('.skill-name');
+    tl.to(skillNames, {
+        opacity: 1,
+        duration: 0.8,
+        ease: "power2.out"
+    }, "-=0.2"); // Start slightly before the movement completely stops
 
 
 
