@@ -633,7 +633,121 @@ window.dispatchEvent(new Event('resize'));
 
 })();
 
+// ===== DECRYPTED TEXT (SCRAMBLE) EFFECT =====
+(function () {
+    function initDecryptedText(element, options = {}) {
+        if (!element) return;
 
+        const originalText = element.textContent.trim();
+        const speed = options.speed || 50;
+        const maxIterations = options.maxIterations || 10;
+        const characters = options.characters || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()_+';
+        const sequential = options.sequential || false;
+        const revealDirection = options.revealDirection || 'start';
+        const animateOn = options.animateOn || 'hover'; // 'hover', 'view', 'both'
+
+        let isScrambling = false;
+        let interval;
+        let revealedIndices = new Set();
+        let hasAnimatedOnView = false;
+        let isHovering = false;
+
+        const getNextIndex = (revealedSet) => {
+            const textLength = originalText.length;
+            switch (revealDirection) {
+                case 'start': return revealedSet.size;
+                case 'end': return textLength - 1 - revealedSet.size;
+                case 'center':
+                    const middle = Math.floor(textLength / 2);
+                    const offset = Math.floor(revealedSet.size / 2);
+                    const nextIndex = revealedSet.size % 2 === 0 ? middle + offset : middle - offset - 1;
+                    if (nextIndex >= 0 && nextIndex < textLength && !revealedSet.has(nextIndex)) return nextIndex;
+                    for (let i = 0; i < textLength; i++) {
+                        if (!revealedSet.has(i)) return i;
+                    }
+                    return 0;
+                default: return revealedSet.size;
+            }
+        };
+
+        const generateScrambledHTML = (currentRevealed) => {
+            return originalText.split('').map((char, i) => {
+                if (char === ' ') return ' ';
+                if (currentRevealed.has(i) || (!isScrambling && !isHovering)) {
+                    return `<span>${originalText[i]}</span>`;
+                }
+                const randomChar = characters[Math.floor(Math.random() * characters.length)];
+                return `<span class="scrambled">${randomChar}</span>`;
+            }).join('');
+        };
+
+        const startScrambling = () => {
+            if (isScrambling) return;
+            isScrambling = true;
+            revealedIndices.clear();
+            let iteration = 0;
+
+            interval = setInterval(() => {
+                if (sequential) {
+                    if (revealedIndices.size < originalText.length) {
+                        const nextIndex = getNextIndex(revealedIndices);
+                        revealedIndices.add(nextIndex);
+                        element.innerHTML = generateScrambledHTML(revealedIndices);
+                    } else {
+                        stopScrambling();
+                    }
+                } else {
+                    element.innerHTML = generateScrambledHTML(revealedIndices);
+                    iteration++;
+                    if (iteration >= maxIterations) {
+                        stopScrambling();
+                    }
+                }
+            }, speed);
+        };
+
+        const stopScrambling = () => {
+            clearInterval(interval);
+            isScrambling = false;
+            element.innerText = originalText;
+        };
+
+        if (animateOn === 'hover' || animateOn === 'both') {
+            element.addEventListener('mouseenter', () => {
+                isHovering = true;
+                startScrambling();
+            });
+            element.addEventListener('mouseleave', () => {
+                isHovering = false;
+                stopScrambling();
+            });
+        }
+
+        if (animateOn === 'view' || animateOn === 'both') {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && !hasAnimatedOnView) {
+                        startScrambling();
+                        hasAnimatedOnView = true;
+                    }
+                });
+            }, { threshold: 0.1 });
+            observer.observe(element);
+        }
+    }
+
+    // Initialize for Skills Title
+    const skillsTitle = document.querySelector('.skills-title');
+    if (skillsTitle) {
+        initDecryptedText(skillsTitle, {
+            speed: 60,
+            maxIterations: 12,
+            sequential: true,
+            revealDirection: 'center',
+            animateOn: 'both'
+        });
+    }
+})();
 // ===== CONTACT SECTION ANIMATION =====
 (function () {
     const contactSection = document.querySelector('.contact-section');

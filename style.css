@@ -1030,6 +1030,14 @@ body.light-theme .skill-name {
     font-weight: 600;
 }
 
+/* Decrypted Text Effect Styles */
+.scrambled {
+    font-family: monospace;
+    opacity: 0.7;
+    color: var(--accent-color, #403f40);
+}
+
+
 
 
 .skill-card:hover {
