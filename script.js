@@ -10,6 +10,7 @@ const body = document.body;
 
 // Theme Toggle Logic
 const handImage = document.querySelector('.hand-image');
+const gsapLogo = document.getElementById('gsapLogo');
 
 themeToggle.addEventListener('change', () => {
     body.classList.toggle('dark-theme');
@@ -18,9 +19,11 @@ themeToggle.addEventListener('change', () => {
     if (body.classList.contains('dark-theme')) {
         img1.src = 'coder-dark.png';
         if (handImage) handImage.src = 'hand.png';
+        if (gsapLogo) gsapLogo.src = 'GSAP-dark.png';
     } else {
         img1.src = 'coder-light.png';
         if (handImage) handImage.src = 'hand-dark.png';
+        if (gsapLogo) gsapLogo.src = 'GSAP-light.png';
     }
 });
 

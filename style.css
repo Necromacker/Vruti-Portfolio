@@ -864,7 +864,7 @@ body.light-theme .scroller-inner img {
     color: var(--text-color);
     /* Visible initially */
     z-index: 20;
-    font-family: "Rubik Dirt", system-ui;
+    font-family: "Saira Stencil One", sans-serif;
     letter-spacing: -1px;
     text-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
     opacity: 1;
