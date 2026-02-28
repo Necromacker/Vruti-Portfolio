@@ -635,118 +635,115 @@ window.dispatchEvent(new Event('resize'));
 
 // ===== DECRYPTED TEXT (SCRAMBLE) EFFECT =====
 (function () {
-    function initDecryptedText(element, options = {}) {
-        if (!element) return;
+    // ========== SKILLS GLITCH LOGIC ==========
+    let glitchChars = "JKLMNOPQRcefghijklopqrst35790!@#$%^&*-+?=/., ";
+    glitchChars = glitchChars.split("").sort(() => 0.5 - Math.random()).join("");
 
-        const originalText = element.textContent.trim();
-        const speed = options.speed || 50;
-        const maxIterations = options.maxIterations || 10;
-        const characters = options.characters || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()_+';
-        const sequential = options.sequential || false;
-        const revealDirection = options.revealDirection || 'start';
-        const animateOn = options.animateOn || 'hover'; // 'hover', 'view', 'both'
+    function getGlitchChar(except) {
+        while (true) {
+            const idx = Math.trunc(Math.random() * glitchChars.length);
+            if (glitchChars[idx] !== except) return glitchChars[idx];
+        }
+    }
 
-        let isScrambling = false;
-        let interval;
-        let revealedIndices = new Set();
-        let hasAnimatedOnView = false;
-        let isHovering = false;
+    function glitchDelay(ms) {
+        return new Promise((r) => setTimeout(r, ms));
+    }
 
-        const getNextIndex = (revealedSet) => {
-            const textLength = originalText.length;
-            switch (revealDirection) {
-                case 'start': return revealedSet.size;
-                case 'end': return textLength - 1 - revealedSet.size;
-                case 'center':
-                    const middle = Math.floor(textLength / 2);
-                    const offset = Math.floor(revealedSet.size / 2);
-                    const nextIndex = revealedSet.size % 2 === 0 ? middle + offset : middle - offset - 1;
-                    if (nextIndex >= 0 && nextIndex < textLength && !revealedSet.has(nextIndex)) return nextIndex;
-                    for (let i = 0; i < textLength; i++) {
-                        if (!revealedSet.has(i)) return i;
-                    }
-                    return 0;
-                default: return revealedSet.size;
-            }
-        };
+    async function skillsGlitchEffect(index, node) {
+        if (node.getAttribute("data-glitching") === "true" && index === 0) return;
+        node.setAttribute("data-glitching", "true");
 
-        const generateScrambledHTML = (currentRevealed) => {
-            return originalText.split('').map((char, i) => {
-                if (char === ' ') return ' ';
-                if (currentRevealed.has(i) || (!isScrambling && !isHovering)) {
-                    return `<span>${originalText[i]}</span>`;
-                }
-                const randomChar = characters[Math.floor(Math.random() * characters.length)];
-                return `<span class="scrambled">${randomChar}</span>`;
-            }).join('');
-        };
+        const targetChar = node.getAttribute("data-char");
 
-        const startScrambling = () => {
-            if (isScrambling) return;
-            isScrambling = true;
-            revealedIndices.clear();
-            let iteration = 0;
-
-            interval = setInterval(() => {
-                if (sequential) {
-                    if (revealedIndices.size < originalText.length) {
-                        const nextIndex = getNextIndex(revealedIndices);
-                        revealedIndices.add(nextIndex);
-                        element.innerHTML = generateScrambledHTML(revealedIndices);
-                    } else {
-                        stopScrambling();
-                    }
-                } else {
-                    element.innerHTML = generateScrambledHTML(revealedIndices);
-                    iteration++;
-                    if (iteration >= maxIterations) {
-                        stopScrambling();
-                    }
-                }
-            }, speed);
-        };
-
-        const stopScrambling = () => {
-            clearInterval(interval);
-            isScrambling = false;
-            element.innerText = originalText;
-        };
-
-        if (animateOn === 'hover' || animateOn === 'both') {
-            element.addEventListener('mouseenter', () => {
-                isHovering = true;
-                startScrambling();
-            });
-            element.addEventListener('mouseleave', () => {
-                isHovering = false;
-                stopScrambling();
-            });
+        if (targetChar === " ") {
+            node.innerHTML = "&nbsp;";
+            node.removeAttribute("data-glitching");
+            return;
         }
 
-        if (animateOn === 'view' || animateOn === 'both') {
+        const isDone = node.innerText === targetChar && index > 5; // Run at least 5 iterations
+
+        if (isDone) {
+            node.innerText = targetChar;
+            node.classList.remove("block", "box");
+            node.removeAttribute("data-glitching");
+            return;
+        }
+
+        node.innerText = glitchChars[index % glitchChars.length];
+
+        node.classList.remove("block", "box");
+        const val = Math.trunc(Math.random() * 6);
+        if (val === 0) node.classList.add("block");
+        else if (val === 1) node.classList.add("box");
+
+        await glitchDelay(40 + Math.trunc(Math.random() * 60));
+        skillsGlitchEffect((index + 1) % glitchChars.length, node);
+    }
+
+    function initSkillsGlitch() {
+        const headings = document.querySelectorAll(".skill-heading");
+        headings.forEach((heading) => {
+            if (heading.getAttribute('data-glitch-init')) return; // Prevent double init
+            const text = heading.innerText.trim();
+            const spans = text
+                .split("")
+                .map((char) => {
+                    if (char === " ") {
+                        return `<span class="skill-char" data-char=" ">&nbsp;</span>`;
+                    }
+                    return `<span class="skill-char" data-char="${char}">${char}</span>`;
+                })
+                .join("");
+            heading.innerHTML = spans;
+            heading.setAttribute('data-glitch-init', 'true');
+        });
+    }
+
+    function startSkillsGlitch(target) {
+        const chars = target ? target.querySelectorAll(".skill-char") : document.querySelectorAll(".skill-heading .skill-char");
+        chars.forEach((span) => {
+            if (span.getAttribute("data-char") !== " ") {
+                skillsGlitchEffect(0, span);
+            }
+        });
+    }
+
+    function setupSkillsGlitch() {
+        initSkillsGlitch();
+
+        // Trigger for section title on scroll
+        const skillsTitle = document.querySelector(".skills-title.skill-heading");
+        if (skillsTitle) {
             const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting && !hasAnimatedOnView) {
-                        startScrambling();
-                        hasAnimatedOnView = true;
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        startSkillsGlitch(entry.target);
                     }
                 });
             }, { threshold: 0.1 });
-            observer.observe(element);
+            observer.observe(skillsTitle);
         }
-    }
 
-    // Initialize for Skills Title
-    const skillsTitle = document.querySelector('.skills-title');
-    if (skillsTitle) {
-        initDecryptedText(skillsTitle, {
-            speed: 60,
-            maxIterations: 12,
-            sequential: true,
-            revealDirection: 'center',
-            animateOn: 'both'
+        // Trigger for skill items on hover
+        const skillItems = document.querySelectorAll(".skill-item");
+        skillItems.forEach((item) => {
+            item.addEventListener("mouseenter", () => {
+                const chars = item.querySelectorAll(".skill-heading .skill-char");
+                chars.forEach((span) => {
+                    if (span.getAttribute("data-char") !== " ") {
+                        // Update target char just in case text changed (though it shouldn't)
+                        const targetChar = span.getAttribute("data-char");
+                        skillsGlitchEffect(0, span);
+                    }
+                });
+            });
         });
     }
+
+    // Call setup
+    setupSkillsGlitch();
 })();
 // ===== CONTACT SECTION ANIMATION =====
 (function () {
