@@ -1,6 +1,21 @@
+// Viewport Refresh Fix for Mac/Safari
+// Register GSAP Plugins immediately
+gsap.registerPlugin(ScrollTrigger);
+
+function updateViewportUnits() {
+    let vw = window.innerWidth * 0.01;
+    document.documentElement.style.setProperty('--vw', `${vw}px`);
+}
+updateViewportUnits();
+window.addEventListener('resize', updateViewportUnits);
+
 const leftSection = document.getElementById('leftSection');
+const mobileToggle = document.getElementById('mobileToggle');
+const mobileDropdown = document.getElementById('mobileDropdown');
+const mobileLinks = document.querySelectorAll('.mobile-link');
 const rightSection = document.getElementById('rightSection');
 const cursor = document.getElementById('cursor');
+const splitLine = document.getElementById('splitLine');
 const img1 = document.getElementById('img1');
 const img2 = document.getElementById('img2');
 const leftText = document.querySelector('.left-text');
@@ -17,152 +32,208 @@ themeToggle.addEventListener('change', () => {
     body.classList.toggle('light-theme');
 
     if (body.classList.contains('dark-theme')) {
-        img1.src = 'coder-dark.png';
-        if (handImage) handImage.src = 'hand.png';
-        if (gsapLogo) gsapLogo.src = 'GSAP-dark.png';
+        img1.src = 'images/coder-dark.png';
+        if (handImage) handImage.src = 'images/hand.png';
+        if (gsapLogo) gsapLogo.src = 'images/GSAP-dark.png';
     } else {
-        img1.src = 'coder-light.png';
-        if (handImage) handImage.src = 'hand-dark.png';
-        if (gsapLogo) gsapLogo.src = 'GSAP-light.png';
+        img1.src = 'images/coder-light.png';
+        if (handImage) handImage.src = 'images/hand-dark.png';
+        if (gsapLogo) gsapLogo.src = 'images/GSAP-light.png';
     }
 });
 
-// Initial setup for animation
-gsap.set('.navbar', { xPercent: 0, opacity: 0 });
-gsap.set(['.nav-left', '.nav-center', '.nav-right'], { opacity: 0 });
-gsap.set(leftSection, { xPercent: -100, width: '50%' });
-gsap.set(rightSection, { xPercent: 100, width: '50%' });
-gsap.set([leftText, rightText], { opacity: 0 });
+// Mobile Menu Toggle Logic
+if (mobileToggle && mobileDropdown) {
+    mobileToggle.addEventListener('click', () => {
+        mobileToggle.classList.toggle('active');
+        mobileDropdown.classList.toggle('active');
 
-// Intro Animation
-const tl = gsap.timeline({
-    onComplete: () => {
-        initMouseInteractions();
-    }
-});
-
-tl.to('.navbar', {
-    opacity: 1,
-    duration: 1.2,
-    ease: "power2.out"
-})
-    .to(['.nav-left', '.nav-center', '.nav-right'], {
-        opacity: 1,
-        stagger: 0.15,
-        duration: 0.8,
-        ease: "power2.out"
-    }, "-=0.6")
-    .to([leftSection, rightSection], {
-        xPercent: 0,
-        duration: 1.5,
-        ease: "power3.inOut"
-    }, "-=0.5")
-    // After meeting at center, wait 1 second then fade in text
-    .to([leftText, rightText], {
-        opacity: 1,
-        duration: 1,
-        ease: "power2.out"
-    }, "+=0.5");
-
-function initMouseInteractions() {
-    window.addEventListener('mousemove', (e) => {
-        const mouseX = e.clientX;
-        const mouseY = e.clientY;
-        const windowWidth = window.innerWidth;
-
-        // Update cursor position
-        gsap.to(cursor, {
-            x: mouseX,
-            y: mouseY,
-            duration: 0.1
-        });
-
-        // Calculate percentage (0 to 100)
-        const percentage = (mouseX / windowWidth) * 100;
-
-        // Update widths for both sections to meet perfectly
-        // Moving mouse left (percentage decreases) should increase leftWidth
-        const leftWidth = 100 - percentage;
-        const rightWidth = 100 - leftWidth; // or just percentage
-
-        gsap.to(leftSection, {
-            width: `${leftWidth}%`,
-            duration: 0.8,
-            ease: "power2.out"
-        });
-
-        gsap.to(rightSection, {
-            width: `${rightWidth}%`,
-            duration: 0.8,
-            ease: "power2.out"
-        });
-
-        // Parallax Animation
-        const parallaxRange = 40;
-        const shiftX = (percentage - 50) * (parallaxRange / 100);
-
-        gsap.to(img1, {
-            x: -shiftX,
-            duration: 1.2,
-            ease: "power2.out"
-        });
-
-        gsap.to(img2, {
-            x: -shiftX,
-            duration: 1.2,
-            ease: "power2.out"
-        });
-
-        // Multi-Directional Image Switch Logic for About Section
-        const aboutImg = document.getElementById('aboutImg');
-        const windowHeight = window.innerHeight;
-        const col = Math.floor((mouseX / windowWidth) * 3); // 0, 1, 2
-        const row = Math.floor((mouseY / windowHeight) * 3); // 0, 1, 2
-
-        let newImage = 'student.png';
-
-        if (row === 0) { // Top
-            if (col === 0) newImage = 'student-upleft.png';
-            else if (col === 1) newImage = 'student-up.png';
-            else if (col === 2) newImage = 'student-upright.png';
-        } else if (row === 1) { // Center row
-            if (col === 0) newImage = 'student-left.png';
-            else if (col === 1) newImage = 'student-center.png';
-            else if (col === 2) newImage = 'student-right.png';
-        } else if (row === 2) { // Bottom row
-            if (col === 0) newImage = 'student-downleft.png';
-            else if (col === 1) newImage = 'student-down.png';
-            else if (col === 2) newImage = 'student-downright.png';
+        // Prevent scrolling when menu is open
+        if (mobileDropdown.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'auto';
         }
+    });
 
-        if (aboutImg && !aboutImg.src.includes(newImage)) {
-            aboutImg.src = newImage;
-        }
-
-        // Fading Logic (Opacity changes with width)
-        const leftOpacity = gsap.utils.clamp(0, 1, (leftWidth - 20) / 30);
-        const rightOpacity = gsap.utils.clamp(0, 1, (rightWidth - 20) / 30);
-
-        gsap.to(leftText, {
-            opacity: leftOpacity,
-            duration: 0.5,
-            ease: "power1.out"
-        });
-
-        gsap.to(rightText, {
-            opacity: rightOpacity,
-            duration: 0.5,
-            ease: "power1.out"
+    mobileLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            mobileToggle.classList.remove('active');
+            mobileDropdown.classList.remove('active');
+            document.body.style.overflow = 'auto';
         });
     });
 }
 
+// Detect mobile breakpoint
+const isMobile = () => window.innerWidth < 1000;
 
+// Initial setup for animation
+gsap.set('.navbar', { xPercent: 0, opacity: 0 });
+gsap.set(['.nav-left', '.nav-center', '.nav-right'], { opacity: 0 });
+
+if (isMobile()) {
+    // Mobile: sections slide in vertically (top section from above, bottom from below)
+    gsap.set(leftSection, { yPercent: -100, width: '100%', height: '50%' });
+    gsap.set(rightSection, { yPercent: 100, width: '100%', height: '50%' });
+} else {
+    // Desktop: sections slide in horizontally
+    gsap.set(leftSection, { xPercent: -100, width: '50%' });
+    gsap.set(rightSection, { xPercent: 100, width: '50%' });
+}
+gsap.set([leftText, rightText], { opacity: 0 });
+
+// Intro Animation
+if (isMobile()) {
+    // Mobile/Tablet: Show everything immediately, skip slide-in/fade animations
+    gsap.set('.navbar', { opacity: 1 });
+    gsap.set(['.nav-left', '.nav-center', '.nav-right'], { opacity: 1 });
+    gsap.set([leftSection, rightSection], { xPercent: 0, yPercent: 0, opacity: 1 });
+    gsap.set([leftText, rightText], { opacity: 1 });
+
+    // Jump straight to interaction initialization
+    initMouseInteractions();
+} else {
+    // Desktop: Keep the premium intro slide-in and text fade
+    const tl = gsap.timeline({
+        onComplete: () => {
+            initMouseInteractions();
+        }
+    });
+
+    tl.to('.navbar', {
+        opacity: 1,
+        duration: 1.2,
+        ease: "power2.out"
+    })
+        .to(['.nav-left', '.nav-center', '.nav-right'], {
+            opacity: 1,
+            stagger: 0.15,
+            duration: 0.8,
+            ease: "power2.out"
+        }, "-=0.6")
+        .to([leftSection, rightSection], {
+            xPercent: 0,
+            yPercent: 0,
+            duration: 1.5,
+            ease: "power3.inOut"
+        }, "-=0.5")
+        .to([leftText, rightText], {
+            opacity: 1,
+            duration: 1,
+            ease: "power2.out"
+        }, "+=0.5");
+}
+
+function initMouseInteractions() {
+    if (isMobile()) {
+        // ─── SCROLL-BASED INTERACTION (MOBILE & TABLET) ───
+        // We pin the container and scrub the height transition
+        ScrollTrigger.create({
+            trigger: ".main-container",
+            start: "top top",
+            end: "+=100%", // Scroll depth for the transition
+            pin: true,
+            scrub: true,
+            onUpdate: (self) => {
+                const scrollProgress = self.progress * 100;
+                const topHeight = scrollProgress;
+                const bottomHeight = 100 - topHeight;
+                const percentage = scrollProgress;
+
+                const windowWidth = window.innerWidth;
+                const windowHeight = window.innerHeight;
+                const vwVal = windowWidth * 0.01;
+
+                // Drive heights
+                gsap.set(leftSection, { height: `${topHeight}%`, width: '100%', left: 0 });
+                gsap.set(rightSection, { top: `${topHeight}%`, height: `${bottomHeight}%`, width: '100%', left: 0 });
+                if (splitLine) gsap.set(splitLine, { top: `${topHeight}%`, left: 0, width: '100%' });
+
+                const leftH1 = leftText.querySelector('h1');
+                const rightH1 = rightText.querySelector('h1');
+                const leftP = leftText.querySelector('p');
+                const rightP = rightText.querySelector('p');
+
+                if (windowWidth < 500) {
+                    const topScale = gsap.utils.interpolate(10, 20, (topHeight - 20) / 100);
+                    const bottomScale = gsap.utils.interpolate(10, 20, (bottomHeight - 20) / 100);
+                    if (leftH1) gsap.set(leftH1, { fontSize: `${gsap.utils.clamp(10, 20, topScale) * vwVal}px` });
+                    if (rightH1) gsap.set(rightH1, { fontSize: `${gsap.utils.clamp(10, 20, bottomScale) * vwVal}px` });
+
+                    const pTopScale = gsap.utils.interpolate(2, 3, (topHeight - 20) / 100);
+                    const pBottomScale = gsap.utils.interpolate(2, 3, (bottomHeight - 20) / 100);
+                    if (leftP) gsap.set(leftP, { fontSize: `${gsap.utils.clamp(2, 3, pTopScale) * vwVal}px` });
+                    if (rightP) gsap.set(rightP, { fontSize: `${gsap.utils.clamp(2, 3, pBottomScale) * vwVal}px` });
+
+                    const img1Opacity = gsap.utils.clamp(0, 1, (topHeight - 20) / 30);
+                    const img2Opacity = gsap.utils.clamp(0, 1, (bottomHeight - 20) / 30);
+                    gsap.set(img1, { yPercent: -bottomHeight * 0.1, opacity: img1Opacity });
+                    gsap.set(img2, { yPercent: -topHeight * 0.1, opacity: img2Opacity });
+
+                    const textShiftY = (percentage - 50) * 3;
+                    gsap.set(leftText, { y: -textShiftY - (windowHeight * 0.02), yPercent: -50, opacity: img1Opacity });
+                    gsap.set(rightText, { y: textShiftY - (windowHeight * 0.02), yPercent: -50, opacity: img2Opacity });
+                } else {
+                    const topScale = gsap.utils.interpolate(5, 12, (topHeight - 20) / 100);
+                    const bottomScale = gsap.utils.interpolate(5, 12, (bottomHeight - 20) / 100);
+                    if (leftH1) gsap.set(leftH1, { fontSize: `${gsap.utils.clamp(5, 12, topScale) * vwVal}px` });
+                    if (rightH1) gsap.set(rightH1, { fontSize: `${gsap.utils.clamp(5, 12, bottomScale) * vwVal}px` });
+
+                    const pTopScale = gsap.utils.interpolate(1, 2, (topHeight - 20) / 100);
+                    const pBottomScale = gsap.utils.interpolate(1, 2, (bottomHeight - 20) / 100);
+                    if (leftP) gsap.set(leftP, { fontSize: `${gsap.utils.clamp(1, 2, pTopScale) * vwVal}px` });
+                    if (rightP) gsap.set(rightP, { fontSize: `${gsap.utils.clamp(1, 2, pBottomScale) * vwVal}px` });
+
+                    const img1Opacity = gsap.utils.clamp(0, 1, (topHeight - 20) / 30);
+                    const img2Opacity = gsap.utils.clamp(0, 1, (bottomHeight - 20) / 30);
+                    gsap.set(img1, { xPercent: (topHeight - 50) * 0.5, yPercent: -bottomHeight * 0.1, opacity: img1Opacity });
+                    gsap.set(img2, { xPercent: (bottomHeight - 50) * 0.5, yPercent: -topHeight * 0.1, opacity: img2Opacity });
+
+                    const textShiftY = (percentage - 50) * 3;
+                    gsap.set(leftText, { x: -textShiftY, y: 0, yPercent: -50, opacity: img1Opacity });
+                    gsap.set(rightText, { x: textShiftY, y: 0, yPercent: -50, opacity: img2Opacity });
+                }
+            }
+        });
+
+    } else {
+        // ─── HORIZONTAL INTERACTION (DESKTOP) ───
+        const handleMove = (clientX, clientY) => {
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+
+            const percentage = (clientX / windowWidth) * 100;
+            const leftWidth = 100 - percentage;
+            const rightWidth = 100 - leftWidth;
+
+            gsap.to(leftSection, { width: `${leftWidth}%`, height: '100%', top: 0, duration: 0.1, ease: 'none' });
+            gsap.to(rightSection, { width: `${rightWidth}%`, height: '100%', top: 0, duration: 0.1, ease: 'none' });
+
+            const shiftX = (percentage - 50) * 0.4;
+            gsap.to(img1, { x: -shiftX, y: 0, duration: 0.1, ease: 'none' });
+            gsap.to(img2, { x: -shiftX, y: 0, duration: 0.1, ease: 'none' });
+
+            const yPercentage = (clientY / windowHeight) * 100;
+            const textShiftY = (yPercentage - 50) * 0.8;
+            const textShiftX = (percentage - 50) * 0.8;
+
+            gsap.to(leftText, { x: -textShiftX, y: -textShiftY, yPercent: -50, opacity: 1, duration: 0.1, ease: 'none' });
+            gsap.to(rightText, { x: -textShiftX, y: -textShiftY, yPercent: -50, opacity: 1, duration: 0.1, ease: 'none' });
+
+            gsap.to(cursor, { x: clientX, y: clientY, opacity: 1, duration: 0.1 });
+        };
+
+        window.addEventListener('mousemove', (e) => handleMove(e.clientX, e.clientY));
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) handleMove(e.touches[0].clientX, e.touches[0].clientY);
+        }, { passive: true });
+    }
+}
 
 // ===== ABOUT SECTION ANIMATION =====
 (function () {
-    // Register ScrollTrigger if not already done globally
-    gsap.registerPlugin(ScrollTrigger);
+    // Register ScrollTrigger is moved to top
 
     const aboutSection = document.querySelector('.about-section');
     const stars = document.querySelectorAll('.about-stars .star');
@@ -214,10 +285,7 @@ function initMouseInteractions() {
 
 })();
 
-// --- Card Swap Animation Logic (Ported from React) ---
-
 // --- Card Swap Animation Logic ---
-
 (function () {
     const wrapper = document.querySelector('.card-swap-wrapper');
     const container = document.querySelector('.card-swap-container');
@@ -226,11 +294,10 @@ function initMouseInteractions() {
     const cards = Array.from(document.querySelectorAll('.card'));
     if (cards.length === 0) return;
 
-    // Configuration
-    const cardDistance = 40; // Horizontal offset per card (px)
-    const verticalDistance = 40; // Vertical offset per card (px)
-    const skewAmount = 2; // Subtle skew
-    const delay = 1000; // 1s wait
+    const cardDistance = 40;
+    const verticalDistance = 40;
+    const skewAmount = 2;
+    const delay = 1000;
 
     const config = {
         ease: 'elastic.out(0.6, 0.8)',
@@ -244,11 +311,10 @@ function initMouseInteractions() {
     const total = cards.length;
     let order = cards.map((_, i) => i);
     let tl = null;
-    let textTl = null; // Separate timeline for text fading
+    let textTl = null;
     let isHovering = false;
     let timeoutId = null;
 
-    // Get project detail elements
     const projectDetails = [
         document.querySelector('.project-detail-1'),
         document.querySelector('.project-detail-2'),
@@ -277,7 +343,6 @@ function initMouseInteractions() {
         });
     };
 
-    // Initial Set - Ensures they start exactly where they should be
     cards.forEach((card, i) => {
         placeNow(card, makeSlot(i));
     });
@@ -303,46 +368,34 @@ function initMouseInteractions() {
         tl = gsap.timeline({
             onComplete: scheduleNextSwap
         });
-
-        // Create separate timeline for text fading
         textTl = gsap.timeline();
 
-        // Determine which text to show based on the front card
         const currentTextIndex = frontIndex;
-        const nextTextIndex = rest[0]; // The card that will come to front
+        const nextTextIndex = rest[0];
 
-        // 1. Drop Front Card Smoothly (1 second)
-        // User requested exactly 100px drop
         const dropY = window.innerHeight;
         const dropDuration = 1;
 
         tl.to(elFront, {
             y: dropY,
-
             opacity: 1,
             duration: dropDuration,
             ease: "power1.inOut",
             overwrite: "auto"
         });
 
-        // TEXT ANIMATION: Fade out current text as card drops
         textTl.to(projectDetails[currentTextIndex], {
             opacity: 0,
             duration: 0.5,
             ease: "power2.out"
-        }, 0); // Start immediately
+        }, 0);
 
         tl.addLabel('promote', `-=${dropDuration * 0.85}`);
 
-        // 2. Move others forward
         rest.forEach((idx, i) => {
             const el = cards[idx];
             const slot = makeSlot(i);
-
-            // Delay z-index update to allow front card to clear and prevent premature layering jumps
-            // We set it halfway through the move
             tl.set(el, { zIndex: slot.zIndex }, `promote+=${dropDuration * 0.5}`);
-
             tl.to(el, {
                 x: slot.x,
                 y: slot.y,
@@ -352,32 +405,17 @@ function initMouseInteractions() {
             }, `promote+=${i * 0.1}`);
         });
 
-        // TEXT ANIMATION: Fade in next text as new card comes forward
         textTl.to(projectDetails[nextTextIndex], {
             opacity: 1,
             duration: 0.6,
             ease: "power2.in"
-        }, 0.4); // Start slightly after fade out begins
+        }, 0.4);
 
-        // 3. Return Front to Back
         const backSlot = makeSlot(total - 1);
-
-        // Synch return exactly when drop finishes
         tl.addLabel('returnStart', dropDuration);
-
-        // Switch Z-Index instantly when drop is done
-        tl.set(elFront, {
-            zIndex: backSlot.zIndex,
-            rotationX: 0
-        }, 'returnStart');
-
-        // Animate from dropY (bottom) to back slot position
+        tl.set(elFront, { zIndex: backSlot.zIndex, rotationX: 0 }, 'returnStart');
         tl.fromTo(elFront,
-            {
-                x: backSlot.x,
-                y: dropY,
-                z: backSlot.z
-            },
+            { x: backSlot.x, y: dropY, z: backSlot.z },
             {
                 x: backSlot.x,
                 y: backSlot.y,
@@ -388,67 +426,47 @@ function initMouseInteractions() {
             },
             'returnStart');
 
-        // Update order state
         tl.call(() => {
             order = [...rest, frontIndex];
         });
     };
 
-    // Hover Interaction - Only pause when hovering a card specifically
     let hoverCount = 0;
-
     cards.forEach(card => {
         card.addEventListener('mouseenter', () => {
             hoverCount++;
-            if (hoverCount === 1) { // First card entered
+            if (hoverCount === 1) {
                 isHovering = true;
                 clearTimeout(timeoutId);
                 if (tl && tl.isActive()) tl.pause();
                 if (textTl && textTl.isActive()) textTl.pause();
             }
         });
-
         card.addEventListener('mouseleave', () => {
             hoverCount--;
-            if (hoverCount <= 0) { // Last card left
+            if (hoverCount <= 0) {
                 hoverCount = 0;
                 isHovering = false;
-                if (tl && tl.paused()) {
-                    tl.resume();
-                }
-                if (textTl && textTl.paused()) {
-                    textTl.resume();
-                }
-                if (!tl || !tl.isActive()) {
-                    scheduleNextSwap();
-                }
+                if (tl && tl.paused()) tl.resume();
+                if (textTl && textTl.paused()) textTl.resume();
+                if (!tl || !tl.isActive()) scheduleNextSwap();
             }
         });
     });
 
-    // Start Loop
     scheduleNextSwap();
 
 })();
 
-// Force initial visibility check
 setTimeout(() => {
-    gsap.set('.card', {
-        opacity: 1,
-        visibility: 'visible'
-    });
+    gsap.set('.card', { opacity: 1, visibility: 'visible' });
 }, 500);
 
-// Force refresh scroll trigger or layout if needed
 window.dispatchEvent(new Event('resize'));
 
 // ===== ANIMATED PROJECTS TEXT WITH ROPES =====
-
 (function () {
-    // Register ScrollTrigger plugin
     gsap.registerPlugin(ScrollTrigger);
-
-    // Get elements
     const text = document.getElementById('projects-text');
     const leftRope = document.getElementById('left-rope');
     const rightRope = document.getElementById('right-rope');
@@ -456,37 +474,17 @@ window.dispatchEvent(new Event('resize'));
 
     if (!text || !leftRope || !rightRope || !projectsSection) return;
 
-    // Function to update rope positions
     function updateRopePositions() {
-        // Get section position to calculate relative coordinates
-        // SVG is absolute to the section, so (0,0) in SVG is top-left of section.
         const sectionRect = projectsSection.getBoundingClientRect();
         const textRect = text.getBoundingClientRect();
-
-        // Calculate Y relative to the section
-        // We want y2 (bottom of rope) to be at the text center
         const textCenterY = (textRect.top - sectionRect.top) + (textRect.height / 2);
-
-        // Calculate letter width approximately
         const letterWidth = textRect.width / text.textContent.length;
-
-        // Position ropes to overlap with first and last letters relative to section left
-        // textRect.left is viewport x. sectionRect.left is viewport x.
-        // relativeX = textRect.left - sectionRect.left
         const relativeLeft = textRect.left - sectionRect.left;
         const relativeRight = textRect.right - sectionRect.left;
-
-        // Left rope overlaps with 'P' (positioned more towards center of first letter)
         const leftX = relativeLeft + (letterWidth * 0.3);
-
-        // Right rope overlaps with 'S' (positioned more towards center of last letter)
         const rightX = relativeRight - (letterWidth * 0.3);
-
-        // Rope Length extending upwards (visually "infinite")
         const ropeLength = 3000;
 
-        // Set rope positions
-        // y1 is far up (textCenterY - length), y2 is at text
         leftRope.setAttribute('x1', leftX);
         leftRope.setAttribute('y1', textCenterY - ropeLength);
         leftRope.setAttribute('x2', leftX);
@@ -498,76 +496,34 @@ window.dispatchEvent(new Event('resize'));
         rightRope.setAttribute('y2', textCenterY);
     }
 
-    // Initial rope position setup
     updateRopePositions();
 
-    // Create GSAP timeline with ScrollTrigger
     const projectsTl = gsap.timeline({
         scrollTrigger: {
             trigger: projectsSection,
             start: "top 80%",
             end: "top 50%",
-
             scrub: 3,
-
-
         },
-        onUpdate: updateRopePositions // Update ropes during animation
+        onUpdate: updateRopePositions
     });
 
-    // Animation sequence - Smooth bounce effect with reduced durations
     projectsTl
-        // 1. Drop the text from top with tilt (ropes stretch as it drops)
-        .to(text, {
-            y: -50,
-            rotation: 8, // Keep the tilt while dropping
-            duration: 2,
-            ease: "power2.in",
-            onUpdate: updateRopePositions
-        })
+        .to(text, { y: -50, rotation: 8, duration: 2, ease: "power2.in" })
+        .to(text, { y: -100, rotation: -10, duration: 0.5, ease: "power2.out" })
+        .to(text, { y: -40, rotation: 3, duration: 0.5, ease: "power1.inOut" })
+        .to(text, { y: -50, rotation: 0, duration: 0.35, ease: "power2.out" });
 
-        // 2. Move up slightly with smooth ease (bounce up) - REDUCED DURATION
-        .to(text, {
-            y: -100,
-            rotation: -10, // Swing to opposite side
-            duration: 0.5,
-            ease: "power2.out",
-            onUpdate: updateRopePositions
-        })
-
-        // 3. Come back down smoothly - REDUCED DURATION
-        .to(text, {
-            y: -40,
-            rotation: 3, // Further reduce tilt
-            duration: 0.5,
-            ease: "power1.inOut",
-            onUpdate: updateRopePositions
-        })
-
-        // 4. Straighten the alignment and settle to final position - REDUCED DURATION
-        .to(text, {
-            y: -50,
-            rotation: 0, // Straighten completely
-            duration: 0.35,
-            ease: "power2.out",
-            onUpdate: updateRopePositions
-        });
-
-    // Update rope positions on window resize
     window.addEventListener('resize', updateRopePositions);
 })();
 
 // ===== SKILLS SECTION ANIMATION =====
 (function () {
     gsap.registerPlugin(ScrollTrigger);
-
     const skillsSection = document.querySelector('.skills-section');
-    const container = document.querySelector('.skills-container');
     const centerSkill = document.querySelector('.center-skill');
     const leftSkills = document.querySelectorAll('.left-skill-item');
     const rightSkills = document.querySelectorAll('.right-skill-item');
-    const title = document.querySelector('.skills-title');
-
     if (!skillsSection || !centerSkill) return;
 
     const tl = gsap.timeline({
@@ -577,233 +533,90 @@ window.dispatchEvent(new Event('resize'));
             end: "+=2000",
             pin: true,
             scrub: 1,
-            // markers: true // Enable for debugging
         }
     });
 
-    // 1. Center element fades in bit by bit
-    tl.to(centerSkill, {
-        opacity: 1,
-        duration: 1,
-        ease: "power1.inOut"
-    });
-
-    // 2. Left side elements slide in, fade in, and align from initial rotation
-    // We animate from "off" state to "final" state defined in CSS (which is the aligned state)
-    // But since CSS has unique positions, we need to decide if we animate TO them or FROM an offset.
-    // 'from' is easier if we want them to land in their CSS-defined spots.
-
-    // 2. Left side elements slide in first
-    tl.from(leftSkills, {
-        x: -300,  // Constant start position (closer)
-        y: (i) => (i % 2 === 0 ? -100 : 100), // Only Y changes
-        opacity: 0,
-        rotation: -45,
-        stagger: 0.2,
-        duration: 1.5,
-        ease: "power2.out"
-    }, "-=0.2");
-
-    // 3. Right side elements slide in overlapping with left side
-    tl.from(rightSkills, {
-        x: 700, // Must be greater than max CSS transform (350%) to ensure Right->Left movement
-        y: (i) => (i % 2 === 0 ? -100 : 100), // Match left side vertical variation
-        opacity: 0,
-        rotation: 45,
-        stagger: 0.1,
-        duration: 1.5,
-        ease: "power2.out"
-
-    }, "-=1.0"); // Overlap: start 1 second before left finishes
-
-    // 4. Fade in all skill names after visuals settle
+    tl.to(centerSkill, { opacity: 1, duration: 1, ease: "power1.inOut" });
+    tl.from(leftSkills, { x: -300, y: (i) => (i % 2 === 0 ? -100 : 100), opacity: 0, rotation: -45, stagger: 0.2, duration: 1.5, ease: "power2.out" }, "-=0.2");
+    tl.from(rightSkills, { x: 700, y: (i) => (i % 2 === 0 ? -100 : 100), opacity: 0, rotation: 45, stagger: 0.1, duration: 1.5, ease: "power2.out" }, "-=1.0");
     const skillNames = document.querySelectorAll('.skill-name');
-    tl.to(skillNames, {
-        opacity: 1,
-        duration: 0.8,
-        ease: "power2.out"
-    }, "-=0.2"); // Start slightly before the movement completely stops
-
-
-
-    // Optional: Add a subtle float animation to all skills after they appear
-    // We need a separate timeline that runs continuously, not scrubbed
-    // But since the section is pinned, we can't easily have infinite animation independent of scroll if the loop is simpler.
-    // Let's just stick to the requested scroll timeline for now.
-
+    tl.to(skillNames, { opacity: 1, duration: 0.8, ease: "power2.out" }, "-=0.2");
 })();
 
 // ===== DECRYPTED TEXT (SCRAMBLE) EFFECT =====
 (function () {
-    // ========== SKILLS GLITCH LOGIC ==========
     let glitchChars = "JKLMNOPQRcefghijklopqrst35790!@#$%^&*-+?=/., ";
     glitchChars = glitchChars.split("").sort(() => 0.5 - Math.random()).join("");
-
-    function getGlitchChar(except) {
-        while (true) {
-            const idx = Math.trunc(Math.random() * glitchChars.length);
-            if (glitchChars[idx] !== except) return glitchChars[idx];
-        }
-    }
-
-    function glitchDelay(ms) {
-        return new Promise((r) => setTimeout(r, ms));
-    }
 
     async function skillsGlitchEffect(index, node) {
         if (node.getAttribute("data-glitching") === "true" && index === 0) return;
         node.setAttribute("data-glitching", "true");
-
         const targetChar = node.getAttribute("data-char");
-
         if (targetChar === " ") {
             node.innerHTML = "&nbsp;";
             node.removeAttribute("data-glitching");
             return;
         }
-
-        const isDone = node.innerText === targetChar && index > 5; // Run at least 5 iterations
-
+        const isDone = node.innerText === targetChar && index > 5;
         if (isDone) {
             node.innerText = targetChar;
             node.classList.remove("block", "box");
             node.removeAttribute("data-glitching");
             return;
         }
-
         node.innerText = glitchChars[index % glitchChars.length];
-
         node.classList.remove("block", "box");
         const val = Math.trunc(Math.random() * 6);
         if (val === 0) node.classList.add("block");
         else if (val === 1) node.classList.add("box");
-
-        await glitchDelay(40 + Math.trunc(Math.random() * 60));
+        await new Promise((r) => setTimeout(r, 40 + Math.trunc(Math.random() * 60)));
         skillsGlitchEffect((index + 1) % glitchChars.length, node);
     }
 
     function initSkillsGlitch() {
         const headings = document.querySelectorAll(".skill-heading");
         headings.forEach((heading) => {
-            if (heading.getAttribute('data-glitch-init')) return; // Prevent double init
+            if (heading.getAttribute('data-glitch-init')) return;
             const text = heading.innerText.trim();
-            const spans = text
-                .split("")
-                .map((char) => {
-                    if (char === " ") {
-                        return `<span class="skill-char" data-char=" ">&nbsp;</span>`;
-                    }
-                    return `<span class="skill-char" data-char="${char}">${char}</span>`;
-                })
-                .join("");
-            heading.innerHTML = spans;
+            heading.innerHTML = text.split("").map((char) => char === " " ? `<span class="skill-char" data-char=" ">&nbsp;</span>` : `<span class="skill-char" data-char="${char}">${char}</span>`).join("");
             heading.setAttribute('data-glitch-init', 'true');
         });
     }
 
     function startSkillsGlitch(target) {
         const chars = target ? target.querySelectorAll(".skill-char") : document.querySelectorAll(".skill-heading .skill-char");
-        chars.forEach((span) => {
-            if (span.getAttribute("data-char") !== " ") {
-                skillsGlitchEffect(0, span);
-            }
-        });
+        chars.forEach((span) => { if (span.getAttribute("data-char") !== " ") skillsGlitchEffect(0, span); });
     }
 
-    function setupSkillsGlitch() {
-        initSkillsGlitch();
-
-        // Trigger for section title on scroll
-        const skillsTitle = document.querySelector(".skills-title.skill-heading");
-        if (skillsTitle) {
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach((entry) => {
-                    if (entry.isIntersecting) {
-                        startSkillsGlitch(entry.target);
-                    }
-                });
-            }, { threshold: 0.1 });
-            observer.observe(skillsTitle);
-        }
-
-        // Trigger for skill items on hover
-        const skillItems = document.querySelectorAll(".skill-item");
-        skillItems.forEach((item) => {
-            item.addEventListener("mouseenter", () => {
-                const chars = item.querySelectorAll(".skill-heading .skill-char");
-                chars.forEach((span) => {
-                    if (span.getAttribute("data-char") !== " ") {
-                        // Update target char just in case text changed (though it shouldn't)
-                        const targetChar = span.getAttribute("data-char");
-                        skillsGlitchEffect(0, span);
-                    }
-                });
-            });
-        });
+    initSkillsGlitch();
+    const skillsTitle = document.querySelector(".skills-title.skill-heading");
+    if (skillsTitle) {
+        new IntersectionObserver((entries) => { entries.forEach((entry) => { if (entry.isIntersecting) startSkillsGlitch(entry.target); }); }, { threshold: 0.1 }).observe(skillsTitle);
     }
-
-    // Call setup
-    setupSkillsGlitch();
+    document.querySelectorAll(".skill-item").forEach((item) => {
+        item.addEventListener("mouseenter", () => {
+            item.querySelectorAll(".skill-heading .skill-char").forEach((span) => { if (span.getAttribute("data-char") !== " ") skillsGlitchEffect(0, span); });
+        });
+    });
 })();
+
 // ===== CONTACT SECTION ANIMATION =====
 (function () {
     const contactSection = document.querySelector('.contact-section');
     const handImage = document.querySelector('.hand-image');
     const contactHeading = document.querySelector('.contact-heading');
-    // Select the wrapper .nebula-input so we animate the whole block
     const formItems = document.querySelectorAll('.nebula-input');
     const submitBtn = document.querySelector('.submit-btn');
-
     if (!contactSection || !handImage) return;
 
-    // Initial States
     gsap.set(handImage, { yPercent: -100 });
-    gsap.set(contactHeading, { autoAlpha: 0, x: -30, filter: "blur(10px)" }); // Reduced x offset, added blur
+    gsap.set(contactHeading, { autoAlpha: 0, x: -30, filter: "blur(10px)" });
     gsap.set(formItems, { autoAlpha: 0, y: 20 });
     gsap.set(submitBtn, { autoAlpha: 0, y: 20 });
 
-    const tl = gsap.timeline({
-        scrollTrigger: {
-            trigger: contactSection,
-            start: "top 60%", // Start when contact section is 60% in view
-            end: "bottom bottom",
-            toggleActions: "play none none none", // Play once
-            once: true // Ensure it only triggers once
-        }
-    });
-
-    // 1. Hand enters slowly from top
-    tl.to(handImage, {
-        y: 50, // Move fully into view (leaving small overlap to avoid gap)
-        duration: 1.5,
-        ease: "power2.out"
-    });
-
-    // 2. "just send it." text fades in smoothly with blur
-    tl.to(contactHeading, {
-        autoAlpha: 1,
-        x: 0,
-        filter: "blur(0px)",
-        duration: 1,
-        ease: "power2.inOut"
-    }, "-=1.0"); // Start 1.5s into the timeline (delay)
-
-    // 3. Inputs fade/slide in subtly
-    tl.to(formItems, {
-        autoAlpha: 1,
-        y: 0,
-        stagger: 0.2,
-        duration: 1,
-        ease: "power2.out"
-    }, "-=1");
-
-    // 4. Submit button fades in
-    tl.to(submitBtn, {
-        autoAlpha: 1,
-        y: 0,
-        duration: 1,
-        ease: "power2.out"
-    }, "-=0.5");
-
+    const tl = gsap.timeline({ scrollTrigger: { trigger: contactSection, start: "top 60%", end: "bottom bottom", toggleActions: "play none none none", once: true } });
+    tl.to(handImage, { y: 50, duration: 1.5, ease: "power2.out" })
+        .to(contactHeading, { autoAlpha: 1, x: 0, filter: "blur(0px)", duration: 1, ease: "power2.inOut" }, "-=1.0")
+        .to(formItems, { autoAlpha: 1, y: 0, stagger: 0.2, duration: 1, ease: "power2.out" }, "-=1")
+        .to(submitBtn, { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" }, "-=0.5");
 })();
-

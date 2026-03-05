@@ -7,6 +7,8 @@
     --font-family: 'Outfit', sans-serif;
     --transition-speed: 0.3s;
     --about-bg-color: #fcf9f2;
+    --vw: 1vw;
+    /* Fallback */
 
     /* Projects Section Variables */
     /* Light Theme Global -> Projects Section is Dark */
@@ -108,15 +110,13 @@ body {
     position: fixed;
     top: 20px;
     left: 2.5%;
-    transform: translateX(-50%);
-    width: 95vw;
-    min-width: 380px;
-    max-width: 1440px;
+    width: calc(var(--vw, 1vw) * 95);
+
     height: 70px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 0 2vw;
+    padding: 0 calc(var(--vw, 1vw) * 2);
     background: var(--nav-bg);
     backdrop-filter: blur(15px);
     border-radius: 9999px;
@@ -177,6 +177,125 @@ body {
     display: flex;
     align-items: center;
     gap: 2rem;
+}
+
+/* Mobile Toggle Styles */
+.mobile-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+}
+
+.mobile-toggle span {
+    width: 100%;
+    height: 2px;
+    background-color: var(--text-color);
+    border-radius: 2px;
+    transition: all 0.3s ease-in-out;
+    transform-origin: center;
+}
+
+.mobile-toggle.active span:nth-child(1) {
+    transform: translateY(9px) rotate(45deg);
+}
+
+.mobile-toggle.active span:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-toggle.active span:nth-child(3) {
+    transform: translateY(-9px) rotate(-45deg);
+}
+
+/* Mobile Dropdown Menu */
+.mobile-dropdown {
+    position: fixed;
+    top: 100px;
+    left: 0;
+    width: 90vw;
+    height: 40vh;
+    background: var(--nav-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+
+    z-index: 999;
+    border-radius: 30px;
+    border: 1px solid rgba(128, 128, 128, 1);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.2);
+
+    /* Animation */
+    transform: translateY(-20px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    pointer-events: none;
+}
+
+.mobile-dropdown.active {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+}
+
+.mobile-dropdown .mobile-link {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--text-color);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: var(--font-family);
+    letter-spacing: 1px;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.mobile-dropdown .mobile-link:active {
+    transform: scale(0.95);
+    color: var(--accent-color);
+}
+
+.mobile-dropdown .mobile-link:hover {
+    color: var(--accent-color);
+}
+
+@media (max-width: 900px) {
+
+    .nav-center,
+    .nav-right .button-container .button {
+        display: none !important;
+    }
+
+    .mobile-toggle {
+        display: flex;
+    }
+
+    .navbar {
+        width: 90vw;
+        left: 5vw;
+        padding: 0 5vw;
+    }
+
+    .button-container {
+        gap: 0.8rem;
+        /* Closer grouping for theme and hamburger */
+    }
+
+    .themeToggle {
+        margin-left: 0;
+        /* Remove desktop margin on mobile */
+    }
 }
 
 /* Social Buttons and Theme Toggle */
@@ -314,7 +433,7 @@ body {
 
 .main-container {
     position: relative;
-    width: 100vw;
+    width: calc(var(--vw, 1vw) * 100);
     height: 100vh;
     display: flex;
     overflow: hidden;
@@ -335,6 +454,8 @@ body {
     width: 50%;
     z-index: 2;
     background-color: var(--bg-color);
+    will-change: width, height, transform;
+    transform: translateZ(0);
 }
 
 .right-section {
@@ -342,11 +463,13 @@ body {
     width: 50%;
     z-index: 2;
     background-color: var(--bg-color);
+    will-change: width, height, transform;
+    transform: translateZ(0);
 }
 
 .content-wrapper {
     position: absolute;
-    width: 100vw;
+    width: calc(var(--vw, 1vw) * 100);
     height: 100%;
     display: flex;
     align-items: center;
@@ -363,9 +486,10 @@ body {
     right: 0;
 }
 
+/* Natural DOM stacking order used: footer-text before content-wrapper in HTML */
 .image-container {
     position: absolute;
-    width: 100vw;
+    width: calc(var(--vw, 1vw) * 100);
     height: 100vh;
     display: flex;
     align-items: flex-end;
@@ -385,13 +509,14 @@ body {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    width: 100vw;
+    width: calc(var(--vw, 1vw) * 100);
     display: flex;
     flex-direction: column;
-    padding: 0 10vw;
+    padding: 0 calc(var(--vw, 1vw) * 10);
     opacity: 0;
-    z-index: 10;
     pointer-events: none;
+    will-change: transform, opacity, font-size;
+    transform: translateZ(0) translateY(-50%);
 }
 
 .left-text {
@@ -425,7 +550,7 @@ body {
 
 /* Enhancing typography */
 h1 {
-    font-size: clamp(2.5rem, 7vw, 5rem);
+    font-size: clamp(2.5rem, calc(var(--vw, 1vw) * 7), 5rem);
     /* Reduced from 3.5rem / 10vw */
     font-weight: 500;
     margin-bottom: 0.5rem;
@@ -441,7 +566,7 @@ h1 {
 }
 
 p {
-    font-size: clamp(0.85rem, 1.25vw, 1rem);
+    font-size: clamp(0.85rem, calc(var(--vw, 1vw) * 1.25), 1rem);
     /* Reduced from 0.9rem / 1.5vw */
     line-height: 1.5;
     color: #888;
@@ -462,7 +587,7 @@ p {
     -webkit-text-fill-color: initial;
 }
 
-/* Add a subtle line between sections */
+/* Add a subtle vertical line between sections on desktop */
 .left-section::after {
     content: '';
     position: absolute;
@@ -473,9 +598,109 @@ p {
     background: linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.1), transparent);
 }
 
+/* Split line — real element for GSAP animation on mobile */
+.split-line {
+    display: none;
+    /* hidden on desktop */
+    position: absolute;
+    left: 0;
+    top: 50%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(to right, transparent 0%, var(--text-color) 20%, var(--text-color) 80%, transparent 100%);
+    opacity: 0.15;
+    pointer-events: none;
+    z-index: 20;
+    transform: translateY(-50%);
+}
+
+/* ===== MOBILE HERO LAYOUT (< 1000px) ===== */
+@media (max-width: 999px) {
+
+    /* Stack sections vertically, full width, 50vh each */
+    .main-container {
+        flex-direction: column;
+    }
+
+    .section {
+        width: 100% !important;
+
+        left: auto !important;
+        right: auto !important;
+        position: absolute !important;
+    }
+
+    .left-section {
+
+        bottom: auto !important;
+    }
+
+    .right-section {
+
+        bottom: auto !important;
+    }
+
+    /* Show and position the real split-line element */
+    .split-line {
+        display: block;
+    }
+
+    /* Remove the ::after pseudo divider on mobile — real element takes over */
+    .left-section::after {
+        display: none;
+    }
+
+    /* Images span full viewport height so they overlap perfectly across the split */
+    .image-container {
+        width: 100%;
+        height: 100vh;
+    }
+
+    #img1,
+    #img2 {
+
+        height: 70vh !important;
+        width: auto !important;
+    }
+
+    .content-wrapper {
+        width: 100%;
+    }
+
+    .left-section .content-wrapper {
+        left: auto;
+    }
+
+    .right-section .content-wrapper {
+        right: auto;
+    }
+
+    /* Text sits vertically centered. DOM order puts it behind the image. */
+    .header-text {
+
+
+        padding: 0 calc(var(--vw, 1vw) * 8);
+        pointer-events: none;
+        align-items: center;
+        /* center both left and right text on mobile */
+        text-align: center;
+    }
+
+    .left-text,
+    .right-text {
+        align-items: center;
+        text-align: center;
+    }
+
+    /* Hide custom cursor on touch devices */
+    .cursor {
+        display: none;
+    }
+}
+
 /* Infinite Loop Scroller */
 .scroller-wrapper {
-    width: 100vw;
+    width: calc(var(--vw, 1vw) * 100);
     overflow: hidden;
     padding: 1.25rem 0;
     display: flex;
@@ -543,7 +768,7 @@ body.light-theme .scroller-inner img {
 }
 
 .about-header-main h2 {
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-size: clamp(2.5rem, calc(var(--vw, 1vw) * 5), 4.5rem);
     font-weight: 500;
     line-height: 1.1;
     margin-bottom: 5rem;
@@ -569,7 +794,7 @@ body.light-theme .scroller-inner img {
 }
 
 .info-block p {
-    font-size: 1rem;
+    font-size: clamp(0.9rem, calc(var(--vw, 1vw) * 1.5), 1.1rem);
     line-height: 1.6;
     margin-top: 0.5rem;
     max-width: 100%;
@@ -770,7 +995,7 @@ body.light-theme .scroller-inner img {
 }
 
 .projects-header h2 {
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-size: clamp(2.5rem, calc(var(--vw, 1vw) * 5), 4.5rem);
     font-weight: 500;
     margin-bottom: 3rem;
     text-transform: uppercase;
@@ -827,7 +1052,7 @@ body.light-theme .scroller-inner img {
 }
 
 .card p {
-    font-size: 1rem;
+    font-size: clamp(0.85rem, calc(var(--vw, 1vw) * 1.3), 1rem);
     color: #666;
 }
 
@@ -858,7 +1083,7 @@ body.light-theme .scroller-inner img {
 
 .skills-title {
 
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-size: clamp(2.5rem, calc(var(--vw, 1vw) * 5), 4.5rem);
     font-weight: 500;
     text-transform: uppercase;
     color: var(--text-color);
@@ -1106,7 +1331,7 @@ body.light-theme .skill-name {
 
 .projects-section {
     position: relative;
-    width: 100vw;
+    width: calc(var(--vw, 1vw) * 100);
     height: 100vh;
     overflow: hidden;
     padding: 0;
@@ -1119,14 +1344,14 @@ body.light-theme .skill-name {
 }
 
 .projects-text-content {
-    margin-left: 15vw;
+    margin-left: calc(var(--vw, 1vw) * 15);
     z-index: 10;
     pointer-events: none;
     /* Let clicks pass through if needed */
 }
 
 .projects-text-content h2 {
-    font-size: clamp(2.5rem, 4vw, 4rem);
+    font-size: clamp(2.5rem, calc(var(--vw, 1vw) * 4), 4rem);
     line-height: 1.1;
     font-weight: 500;
     margin-bottom: 1.5rem;
@@ -1137,7 +1362,7 @@ body.light-theme .skill-name {
 }
 
 .projects-text-content p {
-    font-size: 1.2rem;
+    font-size: clamp(1rem, calc(var(--vw, 1vw) * 1.8), 1.25rem);
     color: var(--projects-text-main);
     text-align: left;
 }
@@ -1164,7 +1389,7 @@ body.light-theme .skill-name {
        Bottom Edge = 100vh. Card Bottom = 106vh. Card Center Y = 106 - 30 = 76vh from TOP.
        So Bottom = 100 - 76 = 24vh.
     */
-    right: 24vw;
+    right: calc(var(--vw, 1vw) * 24);
     bottom: 24vh;
     width: 0px;
     height: 0px;
@@ -1174,7 +1399,7 @@ body.light-theme .skill-name {
 
 .card {
     position: absolute;
-    width: 60vw;
+    width: calc(var(--vw, 1vw) * 60);
     height: 60vh;
     border-radius: 16px;
     background: var(--card-bg);
@@ -1221,19 +1446,22 @@ body.light-theme .skill-name {
     align-items: center;
     justify-content: center;
     background: radial-gradient(circle at 50% 50%, rgba(100, 100, 255, 0.1), transparent 70%);
+    overflow: hidden;
 }
 
-.card-number {
-    font-size: 15vw;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.05);
-    /* Very subtle number */
-    background: linear-gradient(135deg, #a78bfa, #3b82f6);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.3));
-    font-family: var(--font-family);
+.card-project-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    transition: transform 0.4s ease, filter 0.4s ease;
+    filter: brightness(0.95);
+}
+
+.card:hover .card-project-img {
+    transform: scale(1.04);
+    filter: brightness(1.05);
 }
 
 /* Enhancing dark mode for skills */
@@ -1291,7 +1519,7 @@ body.light-theme .skill-name {
 /* Ensure centering on desktop */
 @media (min-width: 769px) {
     .projects-text-content {
-        margin-left: 10vw;
+        margin-left: calc(var(--vw, 1vw) * 10);
         /* Keep some offset from edge */
         flex: 1;
         /* Allow it to take space */
@@ -1311,7 +1539,7 @@ body.light-theme .skill-name {
     flex-direction: column !important;
     justify-content: flex-start !important;
     align-items: center !important;
-    width: 100vw !important;
+    width: calc(var(--vw, 1vw) * 100) !important;
     min-height: 115vh !important;
     /* Extra height to prevent overlap */
     padding: 0 !important;
@@ -1350,7 +1578,7 @@ body.light-theme .skill-name {
     flex: 0 0 45% !important;
     height: 100%;
     margin: 0 !important;
-    padding-left: 10vw;
+    padding-left: calc(var(--vw, 1vw) * 10);
     display: flex !important;
     flex-direction: column;
     justify-content: flex-start;
@@ -1383,7 +1611,7 @@ body.light-theme .skill-name {
 /* Anchor Point for Cards */
 .card-swap-container {
     position: absolute !important;
-    right: 10vw !important;
+    right: calc(var(--vw, 1vw) * 10) !important;
     top: 10vh !important;
     /* Push down from top of content wrapper */
     width: 1px !important;
@@ -1465,7 +1693,7 @@ body.light-theme .skill-name {
 }
 
 .animated-projects-text {
-    font-size: clamp(60px, 5vw, 150px);
+    font-size: clamp(60px, calc(var(--vw, 1vw) * 5), 150px);
     font-weight: 900;
     background-color: var(--about-bg-color);
     padding: 1rem 3rem;
@@ -1491,7 +1719,7 @@ body.light-theme .skill-name {
     }
 
     .animated-projects-text {
-        font-size: clamp(40px, 10vw, 100px);
+        font-size: clamp(40px, calc(var(--vw, 1vw) * 10), 100px);
     }
 }
 
@@ -1506,7 +1734,7 @@ body.light-theme .skill-name {
     align-items: center;
     justify-content: center;
     overflow: hidden;
-    padding: 0 5vw;
+    padding: 0 calc(var(--vw, 1vw) * 5);
     z-index: 20;
     width: 95%;
     border-radius: 3rem;
@@ -1549,7 +1777,7 @@ body.light-theme .skill-name {
 
 .contact-heading {
     font-family: var(--font-family);
-    font-size: clamp(4rem, 8.5vw, 10rem);
+    font-size: clamp(4rem, calc(var(--vw, 1vw) * 8.5), 10rem);
     font-weight: 700;
     line-height: 0.9;
     color: var(--contact-text);

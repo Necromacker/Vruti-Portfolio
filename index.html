@@ -61,6 +61,7 @@
       <a href="#skills">Skills</a>
       <a href="#contact">Contact</a>
     </div>
+
     <div class="nav-right">
       <div class="button-container">
         <a href="https://www.instagram.com/vruti.moradiya?igsh=aTNvaGlwaGF1aHds" class="button flex-center"
@@ -129,7 +130,21 @@
             </g>
           </svg>
         </label>
+
+        <!-- Hamburger Menu Toggle (grouped with theme) -->
+        <button class="mobile-toggle" id="mobileToggle" aria-label="Open Menu">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </div>
+    </div>
+    <!-- Mobile Menu Dropdown -->
+    <div class="mobile-dropdown" id="mobileDropdown">
+      <a href="#about" class="mobile-link">About</a>
+      <a href="#projects" class="mobile-link">Projects</a>
+      <a href="#skills" class="mobile-link">Skills</a>
+      <a href="#contact" class="mobile-link">Contact</a>
     </div>
   </nav>
   <div class="cursor" id="cursor"></div>
@@ -137,12 +152,12 @@
     <!-- Left Section: Designer -->
     <div class="section left-section" id="leftSection">
       <div class="content-wrapper">
-        <div class="image-container">
-          <img src="coder-light.png" alt="Designer Image" id="img1">
-        </div>
         <div class="header-text left-text">
           <h1>&lt;Coder&gt;</h1>
           <p>Building digital experiences with clean code.</p>
+        </div>
+        <div class="image-container">
+          <img src="images/coder-light.png" alt="Designer Image" id="img1">
         </div>
       </div>
     </div>
@@ -150,18 +165,21 @@
     <!-- Right Section: Coder -->
     <div class="section right-section" id="rightSection">
       <div class="content-wrapper">
-        <div class="image-container">
-          <img src="student.png" alt="Coder Image" id="img2">
-        </div>
         <div class="header-text right-text">
           <h1 class="student_text">student</h1>
           <p>Lifelong learner passionate about technology</p>
+        </div>
+        <div class="image-container">
+          <img src="images/student.png" alt="Coder Image" id="img2">
         </div>
       </div>
     </div>
 
     <!-- Center Face (Static or Layered) -->
     <!-- In this layout, each section contains its own half or part of the visual -->
+
+    <!-- Mobile split line (animated by GSAP on mobile) -->
+    <div class="split-line" id="splitLine"></div>
   </div>
 
   <!-- Horizontal Scroller (Infinite Image Loop) -->
@@ -284,7 +302,7 @@
       <!-- Center Image Frame -->
       <div class="about-col about-image-frame">
         <div class="arch-container">
-          <img src="student.png" alt="About Profile" class="arch-img" id="aboutImg">
+          <img src="images/student.png" alt="About Profile" class="arch-img" id="aboutImg">
         </div>
       </div>
 
@@ -352,7 +370,7 @@
               <span>Coming Soon</span>
             </div>
             <div class="card-body">
-              <span class="card-number">1</span>
+              <img src="images/project1.png" alt="Project 1" class="card-project-img">
             </div>
           </div>
           <!-- Card 2 -->
@@ -362,7 +380,7 @@
               <span>Developing</span>
             </div>
             <div class="card-body">
-              <span class="card-number">2</span>
+              <img src="images/project2.png" alt="Project 2" class="card-project-img">
             </div>
           </div>
           <!-- Card 3 -->
@@ -372,7 +390,7 @@
               <span>Concept</span>
             </div>
             <div class="card-body">
-              <span class="card-number">3</span>
+              <img src="images/project3.png" alt="Project 3" class="card-project-img">
             </div>
           </div>
         </div>
@@ -389,7 +407,8 @@
         <!-- Center Element -->
         <div class="center-skill">
           <div class="skill-icon center-icon">
-            <img src="GSAP-light.png" alt="GSAP" id="gsapLogo" style="width: 80%; height: 80%; object-fit: contain;">
+            <img src="images/GSAP-light.png" alt="GSAP" id="gsapLogo"
+              style="width: 80%; height: 80%; object-fit: contain;">
           </div>
           <span class="skill-name skill-heading">GSAP</span>
         </div>
@@ -448,7 +467,7 @@
   <!-- Contact Section -->
   <div class="contact-body">
     <div class="hand-container">
-      <img src="hand.png" alt="3D Hand" class="hand-image">
+      <img src="images/hand.png" alt="3D Hand" class="hand-image">
     </div>
     <section class="contact-section" id="contact">
 
