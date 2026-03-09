@@ -22,6 +22,14 @@ const leftText = document.querySelector('.left-text');
 const rightText = document.querySelector('.right-text');
 const themeToggle = document.getElementById('themeToggle');
 const body = document.body;
+const aboutImg = document.getElementById('aboutImg');
+
+// Preload about images for smooth eye-tracking transition
+if (aboutImg) {
+    ['center', 'up', 'down', 'left', 'right', 'upleft', 'upright', 'downleft', 'downright'].forEach(dir => {
+        new Image().src = `images/student-${dir}.png`;
+    });
+}
 
 // Theme Toggle Logic
 const handImage = document.querySelector('.hand-image');
@@ -230,6 +238,7 @@ function initMouseInteractions() {
         }, { passive: true });
     }
 }
+
 
 // ===== ABOUT SECTION ANIMATION =====
 (function () {
@@ -619,4 +628,57 @@ window.dispatchEvent(new Event('resize'));
         .to(contactHeading, { autoAlpha: 1, x: 0, filter: "blur(0px)", duration: 1, ease: "power2.inOut" }, "-=1.0")
         .to(formItems, { autoAlpha: 1, y: 0, stagger: 0.2, duration: 1, ease: "power2.out" }, "-=1")
         .to(submitBtn, { autoAlpha: 1, y: 0, duration: 1, ease: "power2.out" }, "-=0.5");
+})();
+
+// ─── ABOUT IMAGE EYE TRACKING LOGIC ───
+(function initAboutTracking() {
+    const aboutImgNode = document.getElementById('aboutImg');
+    if (!aboutImgNode) return;
+
+    function updateTracking(clientX, clientY) {
+        const rect = aboutImgNode.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        const dx = clientX - centerX;
+        const dy = clientY - centerY;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        let direction = 'center';
+
+        // Only change direction if mouse is far enough from center to avoid jitter
+        if (distance > 50) {
+            const angle = Math.atan2(dy, dx) * (180 / Math.PI);
+
+            if (angle >= -22.5 && angle < 22.5) direction = 'right';
+            else if (angle >= 22.5 && angle < 67.5) direction = 'downright';
+            else if (angle >= 67.5 && angle < 112.5) direction = 'down';
+            else if (angle >= 112.5 && angle < 157.5) direction = 'downleft';
+            else if (angle >= 157.5 || angle < -157.5) direction = 'left';
+            else if (angle >= -157.5 && angle < -112.5) direction = 'upleft';
+            else if (angle >= -112.5 && angle < -67.5) direction = 'up';
+            else if (angle >= -67.5 && angle < -22.5) direction = 'upright';
+        }
+
+        const newSrc = `images/student-${direction}.png`;
+        if (aboutImgNode.getAttribute('src') !== newSrc) {
+            aboutImgNode.src = newSrc;
+        }
+    }
+
+    const handleInput = (e) => {
+        let x, y;
+        if (e.touches && e.touches.length > 0) {
+            x = e.touches[0].clientX;
+            y = e.touches[0].clientY;
+        } else {
+            x = e.clientX;
+            y = e.clientY;
+        }
+        updateTracking(x, y);
+    };
+
+    window.addEventListener('mousemove', handleInput);
+    window.addEventListener('touchmove', handleInput, { passive: true });
+    window.addEventListener('touchstart', handleInput, { passive: true });
 })();
